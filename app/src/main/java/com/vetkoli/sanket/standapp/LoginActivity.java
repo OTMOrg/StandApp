@@ -1,4 +1,4 @@
-package com.vishwas.credit.standapp;
+package com.vetkoli.sanket.standapp;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;

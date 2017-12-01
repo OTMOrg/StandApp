@@ -1,4 +1,4 @@
-package com.vishwas.credit.standapp.ui.activities;
+package com.vetkoli.sanket.standapp.base.ui.activities;
 
 import android.support.v7.app.AppCompatActivity;
 

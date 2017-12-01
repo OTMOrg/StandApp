@@ -1,9 +1,10 @@
-package com.vishwas.credit.standapp.ui.activities;
+package com.vetkoli.sanket.standapp.splash.ui.activities;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 
-import com.vishwas.credit.standapp.R;
+import com.vetkoli.sanket.standapp.R;
+import com.vetkoli.sanket.standapp.base.ui.activities.BaseActivity;
 
 /**
  * Created by Sanket on 30/11/17.
