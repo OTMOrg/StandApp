@@ -12,7 +12,9 @@ class IBaseContract {
 
         val context: Context
 
-        fun showError(message: String)
+        fun snack(message: String)
+
+        fun snack(message: String, duration: Int)
 
     }
 
