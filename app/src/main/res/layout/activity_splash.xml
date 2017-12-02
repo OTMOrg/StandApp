@@ -4,7 +4,8 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.vetkoli.sanket.standapp.ui.activities.SplashActivity">
+    android:id="@+id/parent_container"
+    tools:context="com.vetkoli.sanket.standapp.splash.ui.activities.SplashActivity">
 
     <TextView
         android:id="@+id/tv_app_logo"
