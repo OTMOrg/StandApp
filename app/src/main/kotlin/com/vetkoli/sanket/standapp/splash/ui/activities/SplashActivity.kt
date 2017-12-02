@@ -1,6 +1,7 @@
 package com.vetkoli.sanket.standapp.splash.ui.activities
 
 import android.os.Bundle
+import android.support.design.widget.Snackbar
 import com.vetkoli.sanket.standapp.R
 import com.vetkoli.sanket.standapp.base.ui.activities.BaseActivity
 
@@ -20,6 +21,6 @@ class SplashActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_splash)
-        snack("Hello")
+        snack("Hello", Snackbar.LENGTH_INDEFINITE)
     }
 }
