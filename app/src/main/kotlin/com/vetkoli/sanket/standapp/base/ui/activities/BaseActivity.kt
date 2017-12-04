@@ -41,13 +41,7 @@ abstract class BaseActivity : AppCompatActivity() , IBaseContract.BaseView {
         snack(message, duration, getString(R.string.ok), listener)
     }
 
-    override fun snack(message: String, duration: Int, buttonString: String) {
-        val snackbar = Snackbar.make(parentContainer, message, duration)
-        snackbar.setAction(buttonString, { snackbar.dismiss() })
-        snackbar.show()
-    }
-
-    override fun snack(message: String, duration: Int, buttonString: String, listener: View.OnClickListener) {
+    override fun snack(message: String, duration: Int, buttonString: String, listener: View.OnClickListener?) {
         Snackbar.make(parentContainer, message, duration)
                 .setAction(buttonString, listener)
                 .show()
