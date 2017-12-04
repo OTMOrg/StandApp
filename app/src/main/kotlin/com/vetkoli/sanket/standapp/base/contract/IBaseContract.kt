@@ -9,9 +9,13 @@ import android.view.View
 
 class IBaseContract {
 
-    internal interface BaseView {
+    interface BaseView {
 
         val context: Context
+
+        fun toast(message: String)
+
+        fun toast(message: String, duration: Int)
 
         fun snack(message: String)
 
@@ -24,7 +28,7 @@ class IBaseContract {
         fun snack(message: String, duration: Int, buttonString: String, listener: View.OnClickListener)
     }
 
-    internal interface BasePresenter {
+    interface BasePresenter {
 
         fun subscribe()
 

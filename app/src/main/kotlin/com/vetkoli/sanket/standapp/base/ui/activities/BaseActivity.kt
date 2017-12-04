@@ -5,6 +5,7 @@ import android.support.design.widget.Snackbar
 import android.support.v7.app.AppCompatActivity
 import android.view.View
 import android.widget.LinearLayout
+import android.widget.Toast
 import com.vetkoli.sanket.standapp.R
 import com.vetkoli.sanket.standapp.base.contract.IBaseContract
 import kotterknife.bindView
@@ -19,6 +20,14 @@ abstract class BaseActivity : AppCompatActivity() , IBaseContract.BaseView {
 
     override val context: Context
         get() = this
+
+    override fun toast(message: String) {
+        toast(message, Toast.LENGTH_SHORT)
+    }
+
+    override fun toast(message: String, duration: Int) {
+        Toast.makeText(this, message, duration).show()
+    }
 
     override fun snack(message: String) {
         snack(message, Snackbar.LENGTH_SHORT)

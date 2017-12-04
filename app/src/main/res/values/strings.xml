@@ -15,4 +15,5 @@
     </string>
     <string name="app_logo_name">Stand App</string>
     <string name="ok">OK</string>
+    <string name="error_no_internet">You seem to be offline, please connect to the internet to proceed further!</string>
 </resources>
