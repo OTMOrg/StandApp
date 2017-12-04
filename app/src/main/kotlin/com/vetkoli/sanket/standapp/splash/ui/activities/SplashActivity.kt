@@ -11,7 +11,6 @@ import com.vetkoli.sanket.standapp.base.ui.activities.BaseActivity
 
 class SplashActivity : BaseActivity() {
 
-
     /*override fun snack(message: String) {
         val snackbar = Snackbar.make(parentContainer, message, Snackbar.LENGTH_SHORT)
         snackbar.setAction("OK", View.OnClickListener { snackbar.dismiss() })
