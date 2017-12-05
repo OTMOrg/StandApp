@@ -1,8 +1,10 @@
 package com.vetkoli.sanket.standapp.splash.ui.activities
 
 import android.os.Bundle
+import android.os.Handler
 import com.vetkoli.sanket.standapp.R
 import com.vetkoli.sanket.standapp.base.ui.activities.BaseActivity
+import com.vetkoli.sanket.standapp.login.LoginActivity
 import com.vetkoli.sanket.standapp.splash.contract.ISplashContract
 import com.vetkoli.sanket.standapp.splash.presenter.SplashPresenter
 
@@ -40,7 +42,9 @@ class SplashActivity : BaseActivity(), ISplashContract.SplashView {
 
     override fun onResume() {
         super.onResume()
-        presenter.delegateFlow()
+        Handler().postDelayed(Runnable {
+            presenter.delegateFlow()
+        }, 3000)
     }
 
     /***
@@ -48,7 +52,7 @@ class SplashActivity : BaseActivity(), ISplashContract.SplashView {
      */
 
     override fun goToLoginActivity() {
-        toast("Go to login")
+        startActivity(LoginActivity.newIntent(this))
     }
 
     override fun goToHomeActivity() {
