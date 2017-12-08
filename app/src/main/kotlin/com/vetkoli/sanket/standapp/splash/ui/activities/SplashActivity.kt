@@ -2,6 +2,10 @@ package com.vetkoli.sanket.standapp.splash.ui.activities
 
 import android.os.Bundle
 import android.os.Handler
+import android.support.design.widget.Snackbar
+import android.view.View
+import android.widget.LinearLayout
+import butterknife.BindView
 import com.vetkoli.sanket.standapp.R
 import com.vetkoli.sanket.standapp.base.ui.activities.BaseActivity
 import com.vetkoli.sanket.standapp.login.LoginActivity
@@ -13,11 +17,9 @@ import com.vetkoli.sanket.standapp.splash.presenter.SplashPresenter
  */
 
 class SplashActivity : BaseActivity(), ISplashContract.SplashView {
-    /*override fun snack(message: String) {
-        val snackbar = Snackbar.make(parentContainer, message, Snackbar.LENGTH_SHORT)
-        snackbar.setAction("OK", View.OnClickListener { snackbar.dismiss() })
-        snackbar.show()
-    }*/
+
+    @BindView(R.id.parent_container)
+    lateinit var llParentContainer: LinearLayout
 
     lateinit var presenter: ISplashContract.SplashPresenter
 
@@ -57,5 +59,11 @@ class SplashActivity : BaseActivity(), ISplashContract.SplashView {
 
     override fun goToHomeActivity() {
         toast("Go to home")
+    }
+
+    override fun snack(message: String, duration: Int, buttonString: String, listener: View.OnClickListener?) {
+        val snackbar = Snackbar.make(llParentContainer, message, duration)
+        snackbar.setAction(buttonString, listener)
+        snackbar.show()
     }
 }

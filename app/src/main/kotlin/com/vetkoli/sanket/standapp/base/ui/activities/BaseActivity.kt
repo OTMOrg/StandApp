@@ -41,10 +41,6 @@ abstract class BaseActivity : AppCompatActivity() , IBaseContract.BaseView {
         snack(message, duration, getString(R.string.ok), listener)
     }
 
-    override fun snack(message: String, duration: Int, buttonString: String, listener: View.OnClickListener?) {
-        Snackbar.make(parentContainer, message, duration)
-                .setAction(buttonString, listener)
-                .show()
-    }
+    abstract override fun snack(message: String, duration: Int, buttonString: String, listener: View.OnClickListener?);
 
 }
