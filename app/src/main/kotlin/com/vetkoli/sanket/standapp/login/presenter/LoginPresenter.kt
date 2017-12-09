@@ -25,24 +25,32 @@ class LoginPresenter(private val view: ILoginContract.LoginView):
     }
 
     override fun validateInput(emailId: String, password: String) {
+        val trimPassword = password.trim()
         if (TextUtils.isEmpty(emailId.trim())) {
             view.showEmailEmptyError()
-        } else if (TextUtils.isEmpty(password.trim())) {
+        } else if (TextUtils.isEmpty(trimPassword)) {
             view.showPasswordEmptyError()
+        } else if (trimPassword.length < 6) {
+            view.snack(view.context.getString(R.string.minimum_password))
         } else {
             view.showProgress()
             val auth = FirebaseAuth.getInstance()
             auth.signInWithEmailAndPassword(emailId, password)
                     .addOnCompleteListener {
-                        task -> performActionOnTaskResult(task)
+                        task ->
+                        performActionOnTaskResult(task, password)
                     }
         }
     }
 
-    private fun performActionOnTaskResult(task: Task<AuthResult>) {
+    private fun performActionOnTaskResult(task: Task<AuthResult>, password: String) {
         view.hideProgress()
         if (!task.isSuccessful) {
-            view.snack(view.context.getString(R.string.auth_failed), duration = Snackbar.LENGTH_LONG)
+            if (password.length < 6) {
+                view.snack(view.context.getString(R.string.minimum_password))
+            } else {
+                view.snack(view.context.getString(R.string.auth_failed), duration = Snackbar.LENGTH_LONG)
+            }
         } else {
             view.toast("Start home activity")
         }
