@@ -1,4 +1,4 @@
-package com.vetkoli.sanket.standapp.login
+package com.vetkoli.sanket.standapp.login.ui.activities
 
 import android.content.Context
 import android.content.Intent

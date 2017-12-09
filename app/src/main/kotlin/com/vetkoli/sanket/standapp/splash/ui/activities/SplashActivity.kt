@@ -4,13 +4,13 @@ import android.os.Bundle
 import android.os.Handler
 import android.support.design.widget.Snackbar
 import android.view.View
-import android.widget.LinearLayout
-import butterknife.BindView
+import butterknife.ButterKnife
 import com.vetkoli.sanket.standapp.R
 import com.vetkoli.sanket.standapp.base.ui.activities.BaseActivity
-import com.vetkoli.sanket.standapp.login.LoginActivity
+import com.vetkoli.sanket.standapp.login.ui.activities.LoginActivity
 import com.vetkoli.sanket.standapp.splash.contract.ISplashContract
 import com.vetkoli.sanket.standapp.splash.presenter.SplashPresenter
+import kotlinx.android.synthetic.main.activity_splash.*
 
 /**
  * Created by Sanket on 30/11/17.
@@ -18,8 +18,10 @@ import com.vetkoli.sanket.standapp.splash.presenter.SplashPresenter
 
 class SplashActivity : BaseActivity(), ISplashContract.SplashView {
 
-    @BindView(R.id.parent_container)
-    lateinit var llParentContainer: LinearLayout
+    /*@BindView(R.id.parent_container)
+    lateinit var llParentContainer: LinearLayout*/
+
+//    val llParentContainer: find<LinearLayout>(R.id.parentContainer)
 
     lateinit var presenter: ISplashContract.SplashPresenter
 
@@ -35,7 +37,12 @@ class SplashActivity : BaseActivity(), ISplashContract.SplashView {
     }
 
     private fun init() {
+        initButterknife()
         initPresenter()
+    }
+
+    private fun initButterknife() {
+        ButterKnife.bind(this)
     }
 
     private fun initPresenter() {
@@ -62,7 +69,7 @@ class SplashActivity : BaseActivity(), ISplashContract.SplashView {
     }
 
     override fun snack(message: String, duration: Int, buttonString: String, listener: View.OnClickListener?) {
-        val snackbar = Snackbar.make(llParentContainer, message, duration)
+        val snackbar = Snackbar.make(parentContainer, message, duration)
         snackbar.setAction(buttonString, listener)
         snackbar.show()
     }
