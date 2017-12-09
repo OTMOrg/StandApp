@@ -23,4 +23,6 @@ abstract class BaseActivity : AppCompatActivity() , IBaseContract.BaseView {
 
     abstract override fun snack(message: String, duration: Int, buttonString: String, listener: View.OnClickListener?)
 
+    protected fun <T> unsafeLazy(initializer: () -> T) = lazy(LazyThreadSafetyMode.NONE, initializer)
+
 }

@@ -23,7 +23,9 @@ class SplashActivity : BaseActivity(), ISplashContract.SplashView {
 
 //    val llParentContainer: find<LinearLayout>(R.id.parentContainer)
 
-    lateinit var presenter: ISplashContract.SplashPresenter
+//    private val presenter: ISplashContract.SplashPresenter by unsafeLazy { SplashPresenter(this) }
+
+    private lateinit var presenter: ISplashContract.SplashPresenter
 
     /***
      * Lifecycle
@@ -41,6 +43,7 @@ class SplashActivity : BaseActivity(), ISplashContract.SplashView {
         initPresenter()
     }
 
+    //remove this after demo
     private fun initButterknife() {
         ButterKnife.bind(this)
     }
@@ -62,6 +65,7 @@ class SplashActivity : BaseActivity(), ISplashContract.SplashView {
 
     override fun goToLoginActivity() {
         startActivity(LoginActivity.newIntent(this))
+        finish()
     }
 
     override fun goToHomeActivity() {
