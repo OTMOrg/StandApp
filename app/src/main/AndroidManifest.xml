@@ -24,7 +24,11 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".login.ui.activities.LoginActivity" />
+        <activity
+            android:name=".login.ui.activities.LoginActivity"
+            android:theme="@style/AppThemeNoActionBar" />
+        <activity android:name=".login.ui.activities.SignupActivity" />
+        <activity android:name=".ResetPasswordActivity"></activity>
     </application>
 
 </manifest>

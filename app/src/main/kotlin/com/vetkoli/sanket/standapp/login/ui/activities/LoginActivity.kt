@@ -3,7 +3,6 @@ package com.vetkoli.sanket.standapp.login.ui.activities
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.support.design.widget.Snackbar
 import android.view.View
 import com.vetkoli.sanket.standapp.R
 import com.vetkoli.sanket.standapp.base.ui.activities.BaseActivity
@@ -40,6 +39,11 @@ class LoginActivity : BaseActivity(), ILoginContract.LoginView {
 
     private fun initOnClickListeners() {
         btnLogin.setOnClickListener { validateInput() }
+        btnSignup.setOnClickListener { goToSignupActivity() }
+    }
+
+    private fun goToSignupActivity() {
+        startActivity(SignupActivity.newIntent(this))
     }
 
     private fun validateInput() {
@@ -53,9 +57,7 @@ class LoginActivity : BaseActivity(), ILoginContract.LoginView {
      */
 
     override fun snack(message: String, duration: Int, buttonString: String, listener: View.OnClickListener?) {
-        val snackbar = Snackbar.make(parentContainer, message, duration)
-        snackbar.setAction(buttonString, listener)
-        snackbar.show()
+        showSnack(message, duration, buttonString, listener, parentContainer)
     }
 
     override fun showEmailEmptyError() {

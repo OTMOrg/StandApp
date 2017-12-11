@@ -24,4 +24,13 @@ interface ILoginContract {
         fun validateInput(emailId: String, password: String)
 
     }
+
+    interface SignupView : IBaseContract.BaseView {
+
+    }
+
+    interface SignupPresenter : IBaseContract.BasePresenter {
+
+    }
+
 }

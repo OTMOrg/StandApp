@@ -2,7 +2,6 @@ package com.vetkoli.sanket.standapp.splash.ui.activities
 
 import android.os.Bundle
 import android.os.Handler
-import android.support.design.widget.Snackbar
 import android.view.View
 import butterknife.ButterKnife
 import com.vetkoli.sanket.standapp.R
@@ -73,8 +72,6 @@ class SplashActivity : BaseActivity(), ISplashContract.SplashView {
     }
 
     override fun snack(message: String, duration: Int, buttonString: String, listener: View.OnClickListener?) {
-        val snackbar = Snackbar.make(parentContainer, message, duration)
-        snackbar.setAction(buttonString, listener)
-        snackbar.show()
+        showSnack(message, duration, buttonString, listener, parentContainer)
     }
 }
