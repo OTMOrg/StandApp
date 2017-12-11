@@ -9,7 +9,7 @@ import android.view.View
  * Created by Sanket on 9/12/17.
  */
 //https://stackoverflow.com/a/44124782/4291698
-class ViewExtensions {
+class ViewExtensions<T> {
 
     inline fun <reified T : View> View.find(id: Int): T = findViewById(id) as T
     inline fun <reified T : View> Activity.find(id: Int): T = findViewById(id) as T

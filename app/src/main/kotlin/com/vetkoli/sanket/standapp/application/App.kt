@@ -31,7 +31,7 @@ class App : Application() {
     }
 
     private fun initCommunication() {
-        val eventManager = EventManager(this, bus)
+        val eventManager = EventManager(bus)
         bus.register(eventManager)
         bus.register(this)
     }
