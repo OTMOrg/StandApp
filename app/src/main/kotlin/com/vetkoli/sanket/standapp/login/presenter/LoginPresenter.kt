@@ -24,7 +24,7 @@ class LoginPresenter(private val view: ILoginContract.LoginView):
 
     }
 
-    override fun validateInput(emailId: String, password: String) {
+    override fun validateInputAndSignIn(emailId: String, password: String) {
         val trimPassword = password.trim()
         if (TextUtils.isEmpty(emailId.trim())) {
             view.showEmailEmptyError()
@@ -34,13 +34,17 @@ class LoginPresenter(private val view: ILoginContract.LoginView):
             view.snack(view.context.getString(R.string.minimum_password))
         } else {
             view.showProgress()
-            val auth = FirebaseAuth.getInstance()
-            auth.signInWithEmailAndPassword(emailId, password)
-                    .addOnCompleteListener {
-                        task ->
-                        performActionOnTaskResult(task, password)
-                    }
+            signIn(emailId, password)
         }
+    }
+
+    private fun signIn(emailId: String, password: String) {
+        val auth = FirebaseAuth.getInstance()
+        auth.signInWithEmailAndPassword(emailId, password)
+                .addOnCompleteListener {
+                    task ->
+                    performActionOnTaskResult(task, password)
+                }
     }
 
     private fun performActionOnTaskResult(task: Task<AuthResult>, password: String) {

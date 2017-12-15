@@ -21,15 +21,27 @@ interface ILoginContract {
 
     interface LoginPresenter: IBaseContract.BasePresenter {
 
-        fun validateInput(emailId: String, password: String)
+        fun validateInputAndSignIn(emailId: String, password: String)
 
     }
 
     interface SignupView : IBaseContract.BaseView {
 
+        fun showEmailEmptyError()
+
+        fun showPasswordEmptyError()
+
+        fun showProgress()
+
+        fun hideProgress()
+
+        fun goToHomeActivity()
+
     }
 
     interface SignupPresenter : IBaseContract.BasePresenter {
+
+        fun validateInputAndSignUp(email: String, password: String)
 
     }
 

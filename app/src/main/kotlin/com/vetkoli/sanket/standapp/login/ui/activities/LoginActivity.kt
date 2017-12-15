@@ -38,7 +38,7 @@ class LoginActivity : BaseActivity(), ILoginContract.LoginView {
     }
 
     private fun initOnClickListeners() {
-        btnLogin.setOnClickListener { validateInput() }
+        btnLogin.setOnClickListener { delegateFlow() }
         btnSignup.setOnClickListener { goToSignupActivity() }
     }
 
@@ -46,10 +46,10 @@ class LoginActivity : BaseActivity(), ILoginContract.LoginView {
         startActivity(SignupActivity.newIntent(this))
     }
 
-    private fun validateInput() {
+    private fun delegateFlow() {
         val emailId: String = etEmail.text.toString()
         val password: String = etPassword.text.toString()
-        presenter.validateInput(emailId, password)
+        presenter.validateInputAndSignIn(emailId, password)
     }
 
     /**
