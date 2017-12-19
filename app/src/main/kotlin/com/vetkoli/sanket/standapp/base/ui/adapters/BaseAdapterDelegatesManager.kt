@@ -1,5 +1,8 @@
 package com.vetkoli.sanket.standapp.base.ui.adapters
 
+import android.view.ViewGroup
+import com.vetkoli.sanket.standapp.base.ui.viewholders.BaseViewHolder
+
 /**
  * Created by Sanket on 16/12/17.
  */
@@ -19,6 +22,23 @@ class BaseAdapterDelegatesManager<T> {
             }
         }
         throw UnsupportedOperationException()
+    }
+
+    public fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BaseViewHolder {
+        for (delegate in delegates) {
+            if (viewType == delegate.getItemViewType()) {
+                return delegate.onCreateViewHolder(parent)
+            }
+        }
+        throw UnsupportedOperationException()
+    }
+
+    public fun onBindViewHolder(holder: BaseViewHolder, item: T) {
+        for (delegate in delegates) {
+            if (delegate.isForViewType(item)) {
+                delegate.onBindViewHolder(holder, item)
+            }
+        }
     }
 
     fun <T> unsafeLazy(initializer: () -> T) = lazy(LazyThreadSafetyMode.NONE, initializer)

@@ -1,6 +1,5 @@
 package com.vetkoli.sanket.standapp.home.ui.adapters
 
-import android.support.v7.widget.RecyclerView
 import android.view.ViewGroup
 import com.vetkoli.sanket.standapp.R
 import com.vetkoli.sanket.standapp.base.models.Item
@@ -17,11 +16,11 @@ class MemberAdapterDelegate: BaseAdapterDelegate<Item> {
         return item is Member
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup): RecyclerView.ViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup): BaseViewHolder {
         return MemberViewHolder(parent.inflate(R.layout.item_home))
     }
 
-    override fun onBindViewHolder(item: Item, holder: BaseViewHolder) {
+    override fun onBindViewHolder(holder: BaseViewHolder, item: Item) {
         holder.bind(item)
     }
 

@@ -27,15 +27,15 @@ interface BaseAdapterDelegate<T> {
      * @param parent The ViewGroup parent of the given data
      * @return The new instantiated [RecyclerView.ViewHolder]
      */
-    fun onCreateViewHolder(parent: ViewGroup): RecyclerView.ViewHolder
+    fun onCreateViewHolder(parent: ViewGroup): BaseViewHolder
 
     /**
      * Called to bind the [RecyclerView.ViewHolder] to the item of the datas source set
      *
-     * @param items The data
+     * @param item The data
      * @param holder The [RecyclerView.ViewHolder] to bind
      */
-    fun onBindViewHolder(item: T, holder: BaseViewHolder)
+    fun onBindViewHolder(holder: BaseViewHolder, item: T)
 
     fun getItemViewType(): Int
 }
