@@ -16,29 +16,33 @@ class BaseAdapterDelegatesManager<T> {
     }
 
     public fun getItemViewType(item: T): Int {
-        for (delegate in delegates) {
-            if (delegate.isForViewType(item)) {
-                return delegate.getItemViewType()
-            }
-        }
-        throw UnsupportedOperationException()
+        return getDelegate(item).getItemViewType()
     }
 
     public fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BaseViewHolder {
+        return getDelegate(viewType).onCreateViewHolder(parent)
+    }
+
+    public fun onBindViewHolder(holder: BaseViewHolder, item: T) {
+        getDelegate(item).onBindViewHolder(holder, item)
+    }
+
+    private fun getDelegate(viewType: Int): BaseAdapterDelegate<T> {
         for (delegate in delegates) {
             if (viewType == delegate.getItemViewType()) {
-                return delegate.onCreateViewHolder(parent)
+                return delegate
             }
         }
         throw UnsupportedOperationException()
     }
 
-    public fun onBindViewHolder(holder: BaseViewHolder, item: T) {
+    private fun getDelegate(item: T): BaseAdapterDelegate<T> {
         for (delegate in delegates) {
             if (delegate.isForViewType(item)) {
-                delegate.onBindViewHolder(holder, item)
+                return delegate
             }
         }
+        throw UnsupportedOperationException()
     }
 
     fun <T> unsafeLazy(initializer: () -> T) = lazy(LazyThreadSafetyMode.NONE, initializer)

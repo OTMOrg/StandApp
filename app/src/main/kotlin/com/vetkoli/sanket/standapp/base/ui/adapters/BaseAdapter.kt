@@ -10,13 +10,13 @@ import com.vetkoli.sanket.standapp.utils.unsafeLazy
  */
 abstract class BaseAdapter<T> : RecyclerView.Adapter<BaseViewHolder>() {
 
-    private var itemList: MutableList<T> = mutableListOf()
+    private lateinit var itemList: MutableList<T>
 
     protected val delegationManager: BaseAdapterDelegatesManager<T>
             by unsafeLazy { BaseAdapterDelegatesManager<T>() }
 
-    protected fun setItems(itemList: List<T>) {
-        this.itemList.addAll(itemList)
+    protected fun setItems(itemList: MutableList<T>) {
+        this.itemList = itemList
         notifyDataSetChanged()
     }
 
