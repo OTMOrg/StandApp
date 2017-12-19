@@ -1,9 +1,11 @@
 package com.vetkoli.sanket.standapp.models
 
+import com.vetkoli.sanket.standapp.base.models.Item
+
 /**
  * Created by Sanket on 16/12/17.
  */
-class Member {
+class Member: Item {
 
     var name: String? = null
 
