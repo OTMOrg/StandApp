@@ -11,8 +11,8 @@ import com.vetkoli.sanket.standapp.utils.inflate
 /**
  * Created by Sanket on 16/12/17.
  */
-class MemberAdapterDelegate: BaseAdapterDelegate<Item> {
-    override fun isForViewType(item: Item): Boolean {
+class MemberAdapterDelegate: BaseAdapterDelegate<Member> {
+    override fun isForViewType(item: Member): Boolean {
         return item is Member
     }
 
@@ -20,7 +20,7 @@ class MemberAdapterDelegate: BaseAdapterDelegate<Item> {
         return MemberViewHolder(parent.inflate(R.layout.item_home))
     }
 
-    override fun onBindViewHolder(holder: BaseViewHolder, item: Item) {
+    override fun onBindViewHolder(holder: BaseViewHolder, item: Member) {
         holder.bind(item)
     }
 
