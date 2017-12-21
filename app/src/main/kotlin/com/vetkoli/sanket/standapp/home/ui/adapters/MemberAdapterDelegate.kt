@@ -2,7 +2,6 @@ package com.vetkoli.sanket.standapp.home.ui.adapters
 
 import android.view.ViewGroup
 import com.vetkoli.sanket.standapp.R
-import com.vetkoli.sanket.standapp.base.models.Item
 import com.vetkoli.sanket.standapp.base.ui.adapters.BaseAdapterDelegate
 import com.vetkoli.sanket.standapp.base.ui.viewholders.BaseViewHolder
 import com.vetkoli.sanket.standapp.models.Member
@@ -25,6 +24,6 @@ class MemberAdapterDelegate: BaseAdapterDelegate<Member> {
     }
 
     override fun getItemViewType(): Int {
-        return Item.MEMBER
+        return 0
     }
 }

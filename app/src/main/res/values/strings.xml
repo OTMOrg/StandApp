@@ -24,7 +24,7 @@
     <string name="auth_failed">Authentication failed, check your email and password or sign up</string>
     <string name="minimum_password">Password too short, enter minimum 6 characters!</string>
     <string name="btn_link_to_login">Already registered. Login Me!</string>
-    <string name="missed_this_month">missed this month</string>
+    <string name="d_missed_this_month">%d missed this month</string>
     <string name="plus_1_button">+1</string>
 
 </resources>

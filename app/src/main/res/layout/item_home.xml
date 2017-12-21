@@ -59,26 +59,15 @@
         app:layout_constraintTop_toTopOf="parent"
         tools:text="4" />
 
-    <TextView
-        android:id="@+id/tvMissed"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="10dp"
-        android:layout_marginStart="10dp"
-        android:text="@string/missed_this_month"
-        app:layout_constraintBaseline_toBaselineOf="@+id/tvMissCount"
-        app:layout_constraintLeft_toRightOf="@+id/tvMissCount" />
-
     <Button
         android:id="@+id/btnPlusOne"
         android:layout_width="88dp"
         android:layout_height="48dp"
-        android:layout_marginLeft="10dp"
-        android:layout_marginStart="10dp"
-        android:layout_marginTop="35dp"
+        android:layout_marginLeft="280dp"
+        android:layout_marginTop="24dp"
         android:text="@string/plus_1_button"
         android:textAppearance="@android:style/TextAppearance.Large"
-        app:layout_constraintLeft_toRightOf="@+id/tvMissed"
+        app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
 

@@ -15,6 +15,6 @@ class Member: Item {
 
     var lastUpdatedOn: Long = 0
 
-    val missList: List<Long>? = null
+    var missList: List<Long>? = null
 
 }

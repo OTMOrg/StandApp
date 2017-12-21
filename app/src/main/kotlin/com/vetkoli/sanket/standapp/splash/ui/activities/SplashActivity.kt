@@ -5,6 +5,7 @@ import android.os.Handler
 import android.view.View
 import com.vetkoli.sanket.standapp.R
 import com.vetkoli.sanket.standapp.base.ui.activities.BaseActivity
+import com.vetkoli.sanket.standapp.home.ui.activities.HomeActivity
 import com.vetkoli.sanket.standapp.login.ui.activities.LoginActivity
 import com.vetkoli.sanket.standapp.splash.contract.ISplashContract
 import com.vetkoli.sanket.standapp.splash.presenter.SplashPresenter
@@ -58,7 +59,8 @@ class SplashActivity : BaseActivity(), ISplashContract.SplashView {
     }
 
     override fun goToHomeActivity() {
-        toast("Go to home")
+        startActivity(HomeActivity.newIntent(this))
+        finish()
     }
 
     override fun snack(message: String, duration: Int, buttonString: String, listener: View.OnClickListener?) {
