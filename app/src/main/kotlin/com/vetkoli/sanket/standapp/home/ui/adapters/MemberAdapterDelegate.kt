@@ -16,7 +16,7 @@ class MemberAdapterDelegate: BaseAdapterDelegate<Member> {
     }
 
     override fun onCreateViewHolder(parent: ViewGroup): BaseViewHolder {
-        return MemberViewHolder(parent.inflate(R.layout.item_home))
+        return MemberViewHolder(parent.inflate(R.layout.item_member))
     }
 
     override fun onBindViewHolder(holder: BaseViewHolder, item: Member) {

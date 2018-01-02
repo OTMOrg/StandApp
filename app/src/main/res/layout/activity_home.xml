@@ -11,6 +11,6 @@
         android:id="@+id/rvHome"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:listitem="@layout/item_home"/>
+        tools:listitem="@layout/item_member"/>
 
 </android.support.constraint.ConstraintLayout>

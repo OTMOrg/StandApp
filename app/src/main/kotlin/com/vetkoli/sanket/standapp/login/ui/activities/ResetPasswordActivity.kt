@@ -1,9 +1,10 @@
-package com.vetkoli.sanket.standapp
+package com.vetkoli.sanket.standapp.login.ui.activities
 
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
+import com.vetkoli.sanket.standapp.R
 import com.vetkoli.sanket.standapp.base.ui.activities.BaseActivity
 
 class ResetPasswordActivity : BaseActivity() {

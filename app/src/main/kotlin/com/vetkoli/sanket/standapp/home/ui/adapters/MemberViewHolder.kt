@@ -8,7 +8,7 @@ import com.vetkoli.sanket.standapp.base.ui.viewholders.BaseViewHolder
 import com.vetkoli.sanket.standapp.models.Member
 import com.vetkoli.sanket.standapp.utils.load
 import com.vetkoli.sanket.standapp.utils.toDateString
-import kotlinx.android.synthetic.main.item_home.view.*
+import kotlinx.android.synthetic.main.item_member.view.*
 
 /**
  * Created by Sanket on 19/12/17.

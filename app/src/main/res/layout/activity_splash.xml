@@ -12,7 +12,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_gravity="center"
-        android:background="@drawable/drawable_gradient_circular"
+        android:background="@drawable/gradient_primary_circular"
         android:gravity="center"
         android:text="@string/app_logo_name"
         android:textColor="@color/colorAccent"

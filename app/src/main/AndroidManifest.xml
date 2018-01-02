@@ -15,7 +15,6 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-
         <activity
             android:name=".splash.ui.activities.SplashActivity"
             android:theme="@style/AppThemeNoActionBar">
@@ -25,17 +24,15 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
         <activity
             android:name=".login.ui.activities.LoginActivity"
             android:theme="@style/AppThemeNoActionBar" />
-
-        <activity android:name=".login.ui.activities.SignupActivity"
-            android:theme="@style/AppThemeNoActionBar"/>
-
-        <activity android:name=".ResetPasswordActivity" />
-
-        <activity android:name=".home.ui.activities.HomeActivity"/>
+        <activity
+            android:name=".login.ui.activities.SignupActivity"
+            android:theme="@style/AppThemeNoActionBar" />
+        <activity android:name=".login.ui.activities.ResetPasswordActivity" />
+        <activity android:name=".home.ui.activities.HomeActivity" />
+        <activity android:name=".home.ui.activities.MemberDetailActivity"></activity>
     </application>
 
 </manifest>
