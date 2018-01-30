@@ -17,4 +17,7 @@ class Member: Item {
 
     var missList: List<Long>? = null
 
+    // Default constructor required for calls to DataSnapshot.getValue(Member.class)
+    constructor()
+
 }
