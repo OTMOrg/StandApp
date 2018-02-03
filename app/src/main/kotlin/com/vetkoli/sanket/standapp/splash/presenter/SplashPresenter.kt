@@ -37,7 +37,6 @@ class SplashPresenter(private val view: ISplashContract.SplashView) : ISplashCon
                         (view.context as SplashActivity).finish()
                     }
             )
-//            view.snack("Hello")
         }
     }
 }

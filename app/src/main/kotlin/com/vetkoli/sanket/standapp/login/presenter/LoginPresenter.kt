@@ -56,7 +56,7 @@ class LoginPresenter(private val view: ILoginContract.LoginView):
                 view.snack(view.context.getString(R.string.auth_failed), duration = Snackbar.LENGTH_LONG)
             }
         } else {
-            view.toast("Start home activity")
+            view.goToHomeActivity()
         }
     }
 

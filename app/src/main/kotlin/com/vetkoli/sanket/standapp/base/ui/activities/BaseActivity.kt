@@ -1,5 +1,6 @@
 package com.vetkoli.sanket.standapp.base.ui.activities
 
+import android.app.ProgressDialog
 import android.content.Context
 import android.support.design.widget.Snackbar
 import android.support.v7.app.AppCompatActivity
@@ -13,7 +14,7 @@ import com.vetkoli.sanket.standapp.base.contract.IBaseContract
 
 abstract class BaseActivity : AppCompatActivity() , IBaseContract.BaseView {
 
-//    val parentContainer: LinearLayout by bindView<LinearLayout>(R.id.parent_container)
+    val progressDialog: ProgressDialog by unsafeLazy { ProgressDialog(this) }
 
     override val context: Context
         get() = this
@@ -28,6 +29,22 @@ abstract class BaseActivity : AppCompatActivity() , IBaseContract.BaseView {
         val snackbar = Snackbar.make(view, message, duration)
         snackbar.setAction(buttonString, listener)
         snackbar.show()
+    }
+
+    override fun showProgress(message: String) {
+        if (progressDialog.isShowing) {
+            progressDialog.dismiss()
+        }
+        progressDialog.apply {
+            setMessage(message)
+            show()
+        }
+    }
+
+    override fun hideProgress() {
+        if (progressDialog.isShowing) {
+            progressDialog.dismiss()
+        }
     }
 
     protected fun <T> unsafeLazy(initializer: () -> T) = lazy(LazyThreadSafetyMode.NONE, initializer)

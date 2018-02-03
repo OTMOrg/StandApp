@@ -15,9 +15,12 @@ class Member: Item {
 
     var lastUpdatedOn: Long = 0
 
-    var missList: List<Long>? = null
 
     // Default constructor required for calls to DataSnapshot.getValue(Member.class)
     constructor()
+
+    var missList: List<Long> = mutableListOf()
+
+    var lastUpdatedBy: String? = null
 
 }

@@ -8,7 +8,9 @@ import com.vetkoli.sanket.standapp.base.contract.IBaseContract
 interface IHomeContract {
 
     interface View : IBaseContract.BaseView {
+        override fun showProgress(message: String)
 
+        override fun hideProgress()
     }
 
     interface Presenter : IBaseContract.BasePresenter {

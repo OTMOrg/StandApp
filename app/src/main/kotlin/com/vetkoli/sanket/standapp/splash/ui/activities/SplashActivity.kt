@@ -1,5 +1,7 @@
 package com.vetkoli.sanket.standapp.splash.ui.activities
 
+import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
 import android.view.View
@@ -17,11 +19,16 @@ import kotlinx.android.synthetic.main.activity_splash.*
 
 class SplashActivity : BaseActivity(), ISplashContract.SplashView {
 
-//    val llParentContainer: find<LinearLayout>(R.id.parentContainer)
-
     private val presenter: ISplashContract.SplashPresenter by unsafeLazy { SplashPresenter(this) }
 
-//    private lateinit var presenter: ISplashContract.SplashPresenter
+    companion object {
+        fun newIntent(context: Context): Intent {
+            val intent = Intent(context, SplashActivity::class.java)
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+            return intent
+        }
+    }
 
     /***
      * Lifecycle
@@ -30,17 +37,7 @@ class SplashActivity : BaseActivity(), ISplashContract.SplashView {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_splash)
-
-        init()
     }
-
-    private fun init() {
-//        initPresenter()
-    }
-
-    /*private fun initPresenter() {
-        presenter = SplashPresenter(this)
-    }*/
 
     override fun onResume() {
         super.onResume()

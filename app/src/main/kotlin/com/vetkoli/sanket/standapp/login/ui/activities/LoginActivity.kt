@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.view.View
 import com.vetkoli.sanket.standapp.R
 import com.vetkoli.sanket.standapp.base.ui.activities.BaseActivity
+import com.vetkoli.sanket.standapp.home.ui.activities.HomeActivity
 import com.vetkoli.sanket.standapp.login.contract.ILoginContract
 import com.vetkoli.sanket.standapp.login.presenter.LoginPresenter
 import kotlinx.android.synthetic.main.activity_login.*
@@ -73,11 +74,11 @@ class LoginActivity : BaseActivity(), ILoginContract.LoginView {
     }
 
     override fun showProgress() {
-        toast("Show Progress")
+        super.showProgress(getString(R.string.please_wait))
     }
 
-    override fun hideProgress() {
-        toast("Hide Progress")
+    override fun goToHomeActivity() {
+        startActivity(HomeActivity.newIntent(this))
     }
 
 }

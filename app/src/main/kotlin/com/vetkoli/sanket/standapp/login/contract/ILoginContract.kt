@@ -15,7 +15,9 @@ interface ILoginContract {
 
         fun showProgress()
 
-        fun hideProgress()
+        override fun hideProgress()
+
+        fun goToHomeActivity()
 
     }
 
@@ -33,7 +35,7 @@ interface ILoginContract {
 
         fun showProgress()
 
-        fun hideProgress()
+        override fun hideProgress()
 
         fun goToHomeActivity()
 

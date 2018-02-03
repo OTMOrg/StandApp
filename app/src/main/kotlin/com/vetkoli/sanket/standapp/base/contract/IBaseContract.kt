@@ -21,6 +21,10 @@ interface IBaseContract {
 
         fun snack(message: String, duration: Int = Snackbar.LENGTH_SHORT,
                   buttonString: String = App.appContext.getString(R.string.ok), listener: View.OnClickListener? = null)
+
+        fun showProgress(message: String)
+
+        fun hideProgress()
     }
 
     interface BasePresenter {
