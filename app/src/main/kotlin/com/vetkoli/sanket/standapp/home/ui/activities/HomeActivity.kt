@@ -1,8 +1,10 @@
 package com.vetkoli.sanket.standapp.home.ui.activities
 
 import android.content.Context
+import android.content.DialogInterface
 import android.content.Intent
 import android.os.Bundle
+import android.support.v7.app.AlertDialog
 import android.support.v7.widget.LinearLayoutManager
 import android.util.Log
 import android.view.Menu
@@ -22,6 +24,7 @@ import com.vetkoli.sanket.standapp.home.ui.adapters.MembersAdapter
 import com.vetkoli.sanket.standapp.models.Member
 import com.vetkoli.sanket.standapp.splash.ui.activities.SplashActivity
 import kotlinx.android.synthetic.main.activity_home.*
+import java.util.*
 
 class HomeActivity : BaseActivity(), IHomeContract.View {
 
@@ -167,5 +170,47 @@ class HomeActivity : BaseActivity(), IHomeContract.View {
     override fun snack(message: String, duration: Int, buttonString: String,
                        listener: View.OnClickListener?) {
         showSnack(message, duration, buttonString, listener, parentContainer)
+    }
+
+    fun showConfirmationDialogToPlusOne(position: Int) {
+        val member = memberList.get(position)
+        val dialogBuilder = AlertDialog.Builder(this)
+        dialogBuilder.setTitle("Confirmation")
+        dialogBuilder.setMessage(getString(R.string.plus_one_confirmation_message, member.name))
+        dialogBuilder.setPositiveButton("Yes", DialogInterface.OnClickListener { dialog, which ->
+            plusOneMemberIfNotAlreadyDoneForToday(position)
+            dialog.dismiss()
+         })
+        dialogBuilder.setNegativeButton("No", DialogInterface.OnClickListener { dialog, which -> dialog.dismiss() })
+        dialogBuilder.create().show()
+    }
+
+    private fun plusOneMemberIfNotAlreadyDoneForToday(position: Int) {
+        val member = memberList.get(position)
+        var missList = member.missList
+        if (missList == null || missList.isEmpty() || !isMemberUpdatedToday(member)) {
+            if (missList == null) {
+                missList = mutableListOf()
+            }
+            val timeMillis = System.currentTimeMillis()
+            missList.add(timeMillis)
+            member.lastUpdatedOn = timeMillis
+
+            val firebaseDatabase = FirebaseDatabase.getInstance()
+            firebaseDatabase.getReference("/teams/farmerApp/members").child(member.id).child("missList").setValue(missList)
+
+        } else {
+            snack("Already updated today")
+        }
+    }
+
+    private fun isMemberUpdatedToday(member: Member): Boolean {
+        val calendar = Calendar.getInstance()
+        val memberLastUpdated = Calendar.getInstance()
+        memberLastUpdated.timeInMillis = member.lastUpdatedOn
+        if (memberLastUpdated.get(Calendar.YEAR) == calendar.get(Calendar.YEAR)) {
+            return memberLastUpdated.get(Calendar.DAY_OF_YEAR) == calendar.get(Calendar.DAY_OF_YEAR)
+        }
+        return false;
     }
 }

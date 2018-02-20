@@ -5,6 +5,7 @@ import com.vetkoli.sanket.standapp.R
 import com.vetkoli.sanket.standapp.application.App
 import com.vetkoli.sanket.standapp.base.models.Item
 import com.vetkoli.sanket.standapp.base.ui.viewholders.BaseViewHolder
+import com.vetkoli.sanket.standapp.home.ui.activities.HomeActivity
 import com.vetkoli.sanket.standapp.models.Member
 import com.vetkoli.sanket.standapp.utils.load
 import com.vetkoli.sanket.standapp.utils.toDateString
@@ -22,6 +23,9 @@ class MemberViewHolder(itemView: View) : BaseViewHolder(itemView) {
         itemView.tvName.text = member.name
         itemView.tvDate.text = member.lastUpdatedOn.toDateString()
         itemView.tvMissCount.text = App.appContext.getString(R.string.d_missed_this_month, member.missList!!.size)
+        itemView.btnPlusOne.setOnClickListener {
+            (itemView.context as HomeActivity).showConfirmationDialogToPlusOne(adapterPosition)
+        }
     }
 
 

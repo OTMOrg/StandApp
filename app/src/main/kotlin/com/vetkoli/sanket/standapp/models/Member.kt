@@ -19,7 +19,7 @@ class Member: Item {
     // Default constructor required for calls to DataSnapshot.getValue(Member.class)
     constructor()
 
-    var missList: List<Long> = mutableListOf()
+    var missList: MutableList<Long> = mutableListOf()
 
     var lastUpdatedBy: String? = null
 
