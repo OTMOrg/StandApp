@@ -35,6 +35,8 @@ class HomeActivity : BaseActivity(), IHomeContract.View {
 
     private lateinit var memberAdapter: MembersAdapter
 
+    private lateinit var currentMember: Member
+
     companion object {
         fun newIntent(context: Context): Intent {
             val intent = Intent(context, HomeActivity::class.java)
@@ -138,7 +140,12 @@ class HomeActivity : BaseActivity(), IHomeContract.View {
                 memberList.clear()
                 dataSnapshot?.children?.forEach{childSnapshot ->
                     val member: Member? = childSnapshot.getValue(Member::class.java)
-                    member?.let { memberList.add(it) }
+                    member?.let {
+                        memberList.add(it)
+                        if (it.id.equals(FirebaseAuth.getInstance().currentUser!!.uid)) {
+                            currentMember = it
+                        }
+                    }
                 }
                 memberAdapter.notifyDataSetChanged()
 
@@ -210,7 +217,8 @@ class HomeActivity : BaseActivity(), IHomeContract.View {
 
             val updatedByMetadata = UpdatedByMetadata()
             updatedByMetadata.updatedAt = timeMillis
-            updatedByMetadata.updatedById = FirebaseAuth.getInstance().currentUser!!.uid
+            updatedByMetadata.updatedById = currentMember.id
+            updatedByMetadata.updatedByName = currentMember.name!!
 
             val missMap = member.missMap
             val year = "Id_" + instance.get(Calendar.YEAR)
