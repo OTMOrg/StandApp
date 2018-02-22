@@ -23,4 +23,8 @@ class Member: Item {
 
     var lastUpdatedBy: String? = null
 
+    var role: String? = null
+
+    var missMap: MutableMap<String, MutableMap<String, MutableMap<String, UpdatedByMetadata>>> = mutableMapOf()
+
 }

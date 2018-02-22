@@ -22,6 +22,7 @@ import com.vetkoli.sanket.standapp.home.contract.IHomeContract
 import com.vetkoli.sanket.standapp.home.presenter.HomePresenter
 import com.vetkoli.sanket.standapp.home.ui.adapters.MembersAdapter
 import com.vetkoli.sanket.standapp.models.Member
+import com.vetkoli.sanket.standapp.models.UpdatedByMetadata
 import com.vetkoli.sanket.standapp.splash.ui.activities.SplashActivity
 import kotlinx.android.synthetic.main.activity_home.*
 import java.util.*
@@ -134,6 +135,7 @@ class HomeActivity : BaseActivity(), IHomeContract.View {
                 .child(Constants.FARMER_APP)
                 .child(Constants.MEMBERS).addValueEventListener(object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot?) {
+                memberList.clear()
                 dataSnapshot?.children?.forEach{childSnapshot ->
                     val member: Member? = childSnapshot.getValue(Member::class.java)
                     member?.let { memberList.add(it) }
@@ -172,36 +174,89 @@ class HomeActivity : BaseActivity(), IHomeContract.View {
         showSnack(message, duration, buttonString, listener, parentContainer)
     }
 
+    /**
+     * Helper
+     */
+
     fun showConfirmationDialogToPlusOne(position: Int) {
         val member = memberList.get(position)
-        val dialogBuilder = AlertDialog.Builder(this)
-        dialogBuilder.setTitle("Confirmation")
-        dialogBuilder.setMessage(getString(R.string.plus_one_confirmation_message, member.name))
-        dialogBuilder.setPositiveButton("Yes", DialogInterface.OnClickListener { dialog, which ->
-            plusOneMemberIfNotAlreadyDoneForToday(position)
-            dialog.dismiss()
-         })
-        dialogBuilder.setNegativeButton("No", DialogInterface.OnClickListener { dialog, which -> dialog.dismiss() })
-        dialogBuilder.create().show()
+        val dialogBuilder = AlertDialog.Builder(this).apply {
+            setTitle("Confirmation")
+            setMessage(getString(R.string.plus_one_confirmation_message, member.name))
+            setPositiveButton("Yes", DialogInterface.OnClickListener { dialog, which ->
+                plusOneMemberIfNotAlreadyDoneForToday(position)
+                dialog.dismiss()
+             })
+            setNegativeButton("No", DialogInterface.OnClickListener { dialog, which -> dialog.dismiss() })
+        }
+        val dialog = dialogBuilder.create()
+        dialog.show()
+        val buttonNegative = dialog.getButton(DialogInterface.BUTTON_NEGATIVE)
+        val buttonPositive = dialog.getButton(DialogInterface.BUTTON_POSITIVE)
+        buttonNegative.setTextColor(resources.getColor(R.color.colorPrimary))
+        buttonPositive.setTextColor(resources.getColor(R.color.colorPrimary))
     }
 
     private fun plusOneMemberIfNotAlreadyDoneForToday(position: Int) {
-        val member = memberList.get(position)
+        val member = memberList[position]
         var missList = member.missList
-        if (missList == null || missList.isEmpty() || !isMemberUpdatedToday(member)) {
-            if (missList == null) {
-                missList = mutableListOf()
-            }
+        if (missList.isEmpty() || !isMemberUpdatedToday(member)) {
             val timeMillis = System.currentTimeMillis()
             missList.add(timeMillis)
             member.lastUpdatedOn = timeMillis
 
-            val firebaseDatabase = FirebaseDatabase.getInstance()
-            firebaseDatabase.getReference("/teams/farmerApp/members").child(member.id).child("missList").setValue(missList)
+            val instance = Calendar.getInstance()
+            instance.timeInMillis = timeMillis
 
+            val updatedByMetadata = UpdatedByMetadata()
+            updatedByMetadata.updatedAt = timeMillis
+            updatedByMetadata.updatedById = FirebaseAuth.getInstance().currentUser!!.uid
+
+            val missMap = member.missMap
+            val year = "Id_" + instance.get(Calendar.YEAR)
+            val month = "Id_" + instance.get(Calendar.MONTH)
+            val dayOfMonth = "Id_" + instance.get(Calendar.DAY_OF_MONTH)
+            if (missMap.containsKey(year)) {
+                val missMonthMap = missMap[year]
+                if (missMonthMap != null) {
+                    if (missMonthMap.containsKey(month)) {
+                        val missDayMap = missMonthMap[month]
+                        if (missDayMap != null) {
+                            missDayMap.put(dayOfMonth, updatedByMetadata)
+                        } else {
+                            initAndPutMissDayIntoMonth(dayOfMonth, updatedByMetadata, missMonthMap, month)
+                        }
+                    } else {
+                        initAndPutMissDayIntoMonth(dayOfMonth, updatedByMetadata, missMonthMap, month)
+                    }
+                } else {
+                    initAndPutMissMonthIntoYear(dayOfMonth, updatedByMetadata, month, missMap, year)
+                }
+            } else {
+                initAndPutMissMonthIntoYear(dayOfMonth, updatedByMetadata, month, missMap, year)
+            }
+
+            val firebaseDatabase = FirebaseDatabase.getInstance()
+            val databaseReference = firebaseDatabase.getReference("/teams/farmerApp/members").child(member.id)
+            databaseReference.setValue(member)
+            databaseReference.child("lastUpdatedOn").setValue(timeMillis)
         } else {
             snack("Already updated today")
         }
+    }
+
+    private fun initAndPutMissMonthIntoYear(dayOfMonth: String, updatedByMetadata: UpdatedByMetadata,
+                                            month: String, missMap: MutableMap<String, MutableMap<String, MutableMap<String, UpdatedByMetadata>>>, year: String) {
+        val missMonthMap = mutableMapOf<String, MutableMap<String, UpdatedByMetadata>>()
+        initAndPutMissDayIntoMonth(dayOfMonth, updatedByMetadata, missMonthMap, month)
+        missMap.put(year, missMonthMap)
+    }
+
+    private fun initAndPutMissDayIntoMonth(dayOfMonth: String, updatedByMetadata: UpdatedByMetadata,
+                                           missMonthMap: MutableMap<String, MutableMap<String, UpdatedByMetadata>>, month: String) {
+        val missDayMap = mutableMapOf<String, UpdatedByMetadata>()
+        missDayMap.put(dayOfMonth, updatedByMetadata)
+        missMonthMap.put(month, missDayMap)
     }
 
     private fun isMemberUpdatedToday(member: Member): Boolean {
