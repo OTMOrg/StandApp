@@ -92,7 +92,7 @@ class HomeActivity : BaseActivity(), IHomeContract.View {
 
     private fun initData() {
         showProgress(getString(R.string.loading))
-        var database = FirebaseDatabase.getInstance()
+        val database = FirebaseDatabase.getInstance()
         val databaseReference = database.getReference()
         databaseReference
                 .child(Constants.TEAMS)
@@ -206,10 +206,9 @@ class HomeActivity : BaseActivity(), IHomeContract.View {
 
     private fun plusOneMemberIfNotAlreadyDoneForToday(position: Int) {
         val member = memberList[position]
-        var missList = member.missList
-        if (missList.isEmpty() || !isMemberUpdatedToday(member)) {
+        if (!isMemberUpdatedToday(member)) {
             val timeMillis = System.currentTimeMillis()
-            missList.add(timeMillis)
+            member.missCount++
             member.lastUpdatedOn = timeMillis
 
             val instance = Calendar.getInstance()
