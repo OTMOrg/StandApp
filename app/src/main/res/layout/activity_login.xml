@@ -86,7 +86,8 @@
             android:textAllCaps="false"
             android:textColor="@android:color/white"
             android:textSize="15dp"
-            android:visibility="visible" />
+            android:visibility="gone"
+            tools:visibility="visible"/>
     </LinearLayout>
 
     <ProgressBar

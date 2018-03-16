@@ -13,5 +13,7 @@ object Constants {
 
     val MEMBERS: String = "members"
 
+    val MEMBER: String = "member"
+
 
 }

@@ -6,16 +6,15 @@ import android.content.Intent
 import android.os.Bundle
 import android.support.v7.app.AlertDialog
 import android.support.v7.widget.LinearLayoutManager
+import android.text.TextUtils
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.database.DataSnapshot
-import com.google.firebase.database.DatabaseError
-import com.google.firebase.database.FirebaseDatabase
-import com.google.firebase.database.ValueEventListener
+import com.google.firebase.database.*
 import com.vetkoli.sanket.standapp.R
+import com.vetkoli.sanket.standapp.application.App
 import com.vetkoli.sanket.standapp.application.Constants
 import com.vetkoli.sanket.standapp.base.ui.activities.BaseActivity
 import com.vetkoli.sanket.standapp.home.contract.IHomeContract
@@ -36,6 +35,10 @@ class HomeActivity : BaseActivity(), IHomeContract.View {
     private lateinit var memberAdapter: MembersAdapter
 
     private lateinit var currentMember: Member
+
+    private var teamName: String = ""
+
+    private var teamKey: String = ""
 
     companion object {
         fun newIntent(context: Context): Intent {
@@ -85,7 +88,6 @@ class HomeActivity : BaseActivity(), IHomeContract.View {
      */
 
     private fun init() {
-        initToolbar()
         initRecyclerView()
         initData()
     }
@@ -94,75 +96,103 @@ class HomeActivity : BaseActivity(), IHomeContract.View {
         showProgress(getString(R.string.loading))
         val database = FirebaseDatabase.getInstance()
         val databaseReference = database.getReference()
-        databaseReference
-                .child(Constants.TEAMS)
-                .child(Constants.FARMER_APP)
-                .child(Constants.TEAM_NAME)
-                .addListenerForSingleValueEvent(object : ValueEventListener {
-                    override fun onDataChange(snapshot: DataSnapshot?) {
-                        hideProgress()
-                        val value : String = snapshot!!.value as String
-                        val actionBar = supportActionBar
-                        actionBar?.subtitle = value
-                    }
+        getData(databaseReference)
 
-                    override fun onCancelled(error: DatabaseError?) {
-                        hideProgress()
-                        Log.e(localClassName, "Failed to read team name")
-                    }
-                })
+//        addDBEntry(databaseReference)
 
-        /*val uid = FirebaseAuth.getInstance().currentUser?.uid
+    }
+
+    private fun addDBEntry(databaseReference: DatabaseReference) {
+        val uid = FirebaseAuth.getInstance().currentUser?.uid
 
         val member = Member()
         val currentTime = System.currentTimeMillis()
-        val list = mutableListOf<Long>()
-        list.add(currentTime)
         member.apply {
             id = uid.toString()
-            name = "Vishal Pamnani"
-            missList = list
+            name = "Neha Bisht"
+            missMap = mutableMapOf()
             lastUpdatedBy = ""
             lastUpdatedOn = currentTime
             profilePic = ""
         }
 
         databaseReference.child(Constants.TEAMS)
-                .child(Constants.FARMER_APP)
+                .child("creditApp")
                 .child(Constants.MEMBERS)
                 .child(uid)
-                .setValue(member)*/
-
-        databaseReference.child(Constants.TEAMS)
-                .child(Constants.FARMER_APP)
-                .child(Constants.MEMBERS).addValueEventListener(object : ValueEventListener {
-            override fun onDataChange(dataSnapshot: DataSnapshot?) {
-                memberList.clear()
-                dataSnapshot?.children?.forEach{childSnapshot ->
-                    val member: Member? = childSnapshot.getValue(Member::class.java)
-                    member?.let {
-                        memberList.add(it)
-                        if (it.id.equals(FirebaseAuth.getInstance().currentUser!!.uid)) {
-                            currentMember = it
-                        }
-                    }
-                }
-                memberAdapter.notifyDataSetChanged()
-
-            }
-
-            override fun onCancelled(p0: DatabaseError?) {
-                Log.e(localClassName, "Failed to read memebrs")
-            }
-        })
-
+                .setValue(member)
     }
 
-    private fun initToolbar() {
-        val actionBar = supportActionBar
-        if (actionBar != null) {
-            actionBar.setDisplayHomeAsUpEnabled(true)
+    private fun getData(databaseReference: DatabaseReference) {
+        databaseReference.child(Constants.TEAMS)
+                .addListenerForSingleValueEvent(object : ValueEventListener {
+                    override fun onDataChange(dataSnapshot: DataSnapshot?) {
+                        if (dataSnapshot != null) {
+                            val userId = FirebaseAuth.getInstance().currentUser?.uid
+                            for (childSnapshot in dataSnapshot.children) {
+                                val membersSnapshot = childSnapshot.child(Constants.MEMBERS)
+                                for (memberSnapshot in membersSnapshot.children) {
+                                    val member = memberSnapshot.getValue(Member::class.java)
+                                    if (member != null) {
+                                        if (userId.equals(member.id)) {
+                                            teamKey = childSnapshot.key
+                                            teamName = childSnapshot.child(Constants.TEAM_NAME).value as String
+                                            initView(member, databaseReference)
+                                            break
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+
+                    override fun onCancelled(p0: DatabaseError?) {
+                        hideProgress()
+                        Log.e(localClassName, "Error while getting team name")
+                    }
+                })
+    }
+
+    private fun initView(member: Member, databaseReference: DatabaseReference) {
+        setSubTitle(teamName)
+        currentMember = member
+        initTeamView(databaseReference)
+    }
+
+    private fun initTeamView(databaseReference: DatabaseReference) {
+        if (!TextUtils.isEmpty(teamKey)) {
+            databaseReference.child(Constants.TEAMS)
+                    .child(teamKey)
+                    .child(Constants.MEMBERS).addValueEventListener(object : ValueEventListener {
+                override fun onDataChange(dataSnapshot: DataSnapshot?) {
+                    memberList.clear()
+                    dataSnapshot?.children?.forEach { childSnapshot ->
+                        val member: Member? = childSnapshot.getValue(Member::class.java)
+                        member?.let {
+                            memberList.add(it)
+                            if (it.id.equals(FirebaseAuth.getInstance().currentUser!!.uid)) {
+                                currentMember = it
+                            }
+                        }
+                    }
+                    memberAdapter.notifyDataSetChanged()
+                    hideProgress()
+                }
+
+                override fun onCancelled(p0: DatabaseError?) {
+                    hideProgress()
+                    Log.e(localClassName, "Failed to read memebrs")
+                }
+            })
+        } else {
+            snack("Team corresponding to the current user not found")
+            hideProgress()
         }
+    }
+
+    private fun setSubTitle(title: String) {
+        val actionBar = supportActionBar
+        actionBar?.subtitle = title
     }
 
     private fun initRecyclerView() {
@@ -244,7 +274,7 @@ class HomeActivity : BaseActivity(), IHomeContract.View {
             }
 
             val firebaseDatabase = FirebaseDatabase.getInstance()
-            val databaseReference = firebaseDatabase.getReference("/teams/farmerApp/members").child(member.id)
+            val databaseReference = firebaseDatabase.getReference("/teams/" + teamKey + "/members").child(member.id)
             databaseReference.setValue(member)
             databaseReference.child("lastUpdatedOn").setValue(timeMillis)
         } else {
@@ -274,5 +304,11 @@ class HomeActivity : BaseActivity(), IHomeContract.View {
             return memberLastUpdated.get(Calendar.DAY_OF_YEAR) == calendar.get(Calendar.DAY_OF_YEAR)
         }
         return false;
+    }
+
+    fun goToMemberDetail(position: Int) {
+        val member = memberList.get(position)
+        App.missMap = member.missMap
+        startActivity(MemberDetailActivity.newIntent(context, member))
     }
 }

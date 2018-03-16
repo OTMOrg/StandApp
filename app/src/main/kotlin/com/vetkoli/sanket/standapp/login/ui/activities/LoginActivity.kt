@@ -79,6 +79,7 @@ class LoginActivity : BaseActivity(), ILoginContract.LoginView {
 
     override fun goToHomeActivity() {
         startActivity(HomeActivity.newIntent(this))
+        finish()
     }
 
 }
