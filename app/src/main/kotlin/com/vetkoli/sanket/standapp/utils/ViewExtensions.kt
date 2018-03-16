@@ -36,6 +36,21 @@ fun <T : View> View.bind(@IdRes idRes: Int): Lazy<T> {
 
 fun ImageView.load(url: String?) {
     Glide.with(App.appContext).load(url).apply(RequestOptions.placeholderOf(R.mipmap.ic_launcher).fallback(R.mipmap.ic_launcher)).into(this)
+    /*val url = "https://firebasestorage.googleapis.com/v0/b/stand-app-8a4e8.appspot.com/o/test_image.jpg?alt=media&token=3ec4d6c5-288a-4f0f-9895-e6f442ff10cf"
+    val thumb = "https://firebasestorage.googleapis.com/v0/b/stand-app-8a4e8.appspot.com/o/Averaging_screenshot_27.02.2018_50.png?alt=media&token=257de6cf-295b-4f82-9634-f2b32c5f3e88"*/
+
+    /*val requestBuilder = Glide.with(App.appContext).load(url)
+
+    requestBuilder
+            .thumbnail(Glide.with(App.appContext).load(thumb))
+            .load(url)
+            .into(this)*/
+
+    /*Glide.with(App.appContext).load(thumb).apply(RequestOptions().diskCacheStrategy(DiskCacheStrategy.ALL)).into(this)
+
+    postDelayed(Runnable { Glide.with(App.appContext).load(url).apply(RequestOptions().diskCacheStrategy(DiskCacheStrategy.ALL)).into(this) }, 2000)*/
+
+
 }
 
 fun ViewGroup.inflate(layoutRes: Int): View {
