@@ -33,7 +33,7 @@ class LoginPresenter(private val view: ILoginContract.LoginView):
         } else if (trimPassword.length < 6) {
             view.snack(view.context.getString(R.string.minimum_password))
         } else {
-            view.showProgress()
+            view.showProgress(view.context.getString(R.string.please_wait))
             signIn(emailId, password)
         }
     }

@@ -3,6 +3,7 @@ package com.vetkoli.sanket.standapp.utils
 import android.content.Context
 import android.net.ConnectivityManager
 import com.vetkoli.sanket.standapp.application.App
+import com.vetkoli.sanket.standapp.application.Constants
 import com.vetkoli.sanket.standapp.models.Member
 import java.util.*
 
@@ -41,6 +42,10 @@ object MiscUtils {
                 }
             }
         }
+    }
+
+    fun isCurrentUserScrumMaster(member: Member): Boolean {
+        return member.role?.toLowerCase()?.contains(Constants.SCRUM_MASTER.toLowerCase())!!
     }
 
 }

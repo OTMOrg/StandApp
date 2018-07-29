@@ -23,6 +23,7 @@ import com.vetkoli.sanket.standapp.home.ui.adapters.MembersAdapter
 import com.vetkoli.sanket.standapp.models.Member
 import com.vetkoli.sanket.standapp.models.UpdatedByMetadata
 import com.vetkoli.sanket.standapp.splash.ui.activities.SplashActivity
+import com.vetkoli.sanket.standapp.utils.MiscUtils
 import kotlinx.android.synthetic.main.activity_home.*
 import java.util.*
 
@@ -63,6 +64,14 @@ class HomeActivity : BaseActivity(), IHomeContract.View {
         return super.onCreateOptionsMenu(menu)
     }
 
+    override fun onPrepareOptionsMenu(menu: Menu?): Boolean {
+        val actionClear = menu!!.findItem(R.id.action_clear_all)
+        if (::currentMember.isInitialized) {
+            actionClear.isVisible = MiscUtils.isCurrentUserScrumMaster(currentMember)
+        }
+        return super.onPrepareOptionsMenu(menu)
+    }
+
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
         if (item != null) {
             when (item.itemId) {
@@ -70,7 +79,14 @@ class HomeActivity : BaseActivity(), IHomeContract.View {
                     onBackPressed()
                     return true
                 }
-                R.id.action_logout -> logout()
+                R.id.action_logout -> {
+                    logout()
+                    return true
+                }
+                R.id.action_clear_all -> {
+                    showConfirmationDialogToClearAllEntries()
+                    return true
+                }
             }
         }
         return super.onOptionsItemSelected(item)
@@ -93,7 +109,7 @@ class HomeActivity : BaseActivity(), IHomeContract.View {
     }
 
     private fun initData() {
-        showProgress(getString(R.string.loading))
+        showProgress(R.string.loading)
         val database = FirebaseDatabase.getInstance()
         val databaseReference = database.reference
         getData(databaseReference)
@@ -112,8 +128,9 @@ class HomeActivity : BaseActivity(), IHomeContract.View {
             name = "Hrituja Hedau"
             missMap = mutableMapOf()
             lastUpdatedBy = ""
-            lastUpdatedOn = currentTime
+//            lastUpdatedOn = currentTime
             profilePic = ""
+            role = ""
         }
 
         databaseReference.child(Constants.TEAMS)
@@ -149,6 +166,7 @@ class HomeActivity : BaseActivity(), IHomeContract.View {
                     override fun onCancelled(p0: DatabaseError?) {
                         hideProgress()
                         Log.e(localClassName, "Error while getting team name")
+                        snack(getString(R.string.error_while_fetching_data))
                     }
                 })
     }
@@ -182,6 +200,7 @@ class HomeActivity : BaseActivity(), IHomeContract.View {
                 override fun onCancelled(p0: DatabaseError?) {
                     hideProgress()
                     Log.e(localClassName, "Failed to read memebrs")
+                    snack(getString(R.string.failed_to_read_members))
                 }
             })
         } else {
@@ -218,7 +237,7 @@ class HomeActivity : BaseActivity(), IHomeContract.View {
     fun showConfirmationDialogToPlusOne(position: Int) {
         val member = memberList.get(position)
         val dialogBuilder = AlertDialog.Builder(this).apply {
-            setTitle("Confirmation")
+            setTitle(getString(R.string.confirmation))
             setMessage(getString(R.string.plus_one_confirmation_message, member.name))
             setPositiveButton("Yes", DialogInterface.OnClickListener { dialog, which ->
                 plusOneMemberIfNotAlreadyDoneForToday(position)
@@ -232,6 +251,45 @@ class HomeActivity : BaseActivity(), IHomeContract.View {
         val buttonPositive = dialog.getButton(DialogInterface.BUTTON_POSITIVE)
         buttonNegative.setTextColor(resources.getColor(R.color.colorPrimary))
         buttonPositive.setTextColor(resources.getColor(R.color.colorPrimary))
+    }
+
+    private fun showConfirmationDialogToClearAllEntries() {
+        val dialogBuilder = AlertDialog.Builder(this).apply {
+            setTitle(getString(R.string.confirmation))
+            setMessage(getString(R.string.clear_miss_count_confirmation_message))
+            setPositiveButton("Yes", DialogInterface.OnClickListener { dialog, which ->
+                clearAllMembersMissCount()
+                dialog.dismiss()
+            })
+            setNegativeButton("No", DialogInterface.OnClickListener { dialog, which -> dialog.dismiss() })
+        }
+        val dialog = dialogBuilder.create()
+        dialog.show()
+        val buttonNegative = dialog.getButton(DialogInterface.BUTTON_NEGATIVE)
+        val buttonPositive = dialog.getButton(DialogInterface.BUTTON_POSITIVE)
+        buttonNegative.setTextColor(resources.getColor(R.color.colorPrimary))
+        buttonPositive.setTextColor(resources.getColor(R.color.colorPrimary))
+    }
+
+    private fun clearAllMembersMissCount() {
+        showProgress(R.string.loading)
+        val firebaseDatabase = FirebaseDatabase.getInstance()
+        val databaseReference = firebaseDatabase.getReference("/teams/" + teamKey + "/members")
+        databaseReference.addListenerForSingleValueEvent(object : ValueEventListener {
+            override fun onDataChange(dataSnapshot: DataSnapshot?) {
+                memberList.clear()
+                dataSnapshot?.children?.forEach { childSnapshot ->
+                    databaseReference.child(childSnapshot.key).child("missCount").setValue(0)
+                }
+                hideProgress()
+            }
+
+            override fun onCancelled(p0: DatabaseError?) {
+                hideProgress()
+                Log.e(localClassName, "Failed to read memebrs")
+                snack(getString(R.string.failed_to_read_members))
+            }
+        })
     }
 
     private fun plusOneMemberIfNotAlreadyDoneForToday(position: Int) {

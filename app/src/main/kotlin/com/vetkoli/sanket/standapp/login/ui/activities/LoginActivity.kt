@@ -73,10 +73,6 @@ class LoginActivity : BaseActivity(), ILoginContract.LoginView {
         toast(errorString)
     }
 
-    override fun showProgress() {
-        super.showProgress(getString(R.string.please_wait))
-    }
-
     override fun goToHomeActivity() {
         startActivity(HomeActivity.newIntent(this))
         finish()

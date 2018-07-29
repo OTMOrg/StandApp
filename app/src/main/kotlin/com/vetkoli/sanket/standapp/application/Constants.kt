@@ -15,5 +15,7 @@ object Constants {
 
     val MEMBER: String = "member"
 
+    val SCRUM_MASTER: String = "Scrum Master"
+
 
 }

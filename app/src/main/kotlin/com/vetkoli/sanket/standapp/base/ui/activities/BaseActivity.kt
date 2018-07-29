@@ -2,6 +2,7 @@ package com.vetkoli.sanket.standapp.base.ui.activities
 
 import android.app.ProgressDialog
 import android.content.Context
+import android.support.annotation.StringRes
 import android.support.design.widget.Snackbar
 import android.support.v7.app.AppCompatActivity
 import android.view.View
@@ -39,6 +40,10 @@ abstract class BaseActivity : AppCompatActivity() , IBaseContract.BaseView {
             setMessage(message)
             show()
         }
+    }
+
+    fun showProgress(@StringRes id: Int) {
+        showProgress(getString(id))
     }
 
     override fun hideProgress() {

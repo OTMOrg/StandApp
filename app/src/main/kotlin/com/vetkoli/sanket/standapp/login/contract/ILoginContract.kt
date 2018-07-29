@@ -13,10 +13,6 @@ interface ILoginContract {
 
         fun showPasswordEmptyError()
 
-        fun showProgress()
-
-        override fun hideProgress()
-
         fun goToHomeActivity()
 
     }
