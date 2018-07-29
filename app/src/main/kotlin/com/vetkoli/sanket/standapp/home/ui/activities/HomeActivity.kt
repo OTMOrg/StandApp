@@ -369,4 +369,8 @@ class HomeActivity : BaseActivity(), IHomeContract.View {
         App.missMap = member.missMap
         startActivity(MemberDetailActivity.newIntent(context, member))
     }
+
+    fun getCurrentUser(): Member {
+        return currentMember
+    }
 }

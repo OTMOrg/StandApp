@@ -12,7 +12,6 @@ import com.vetkoli.sanket.standapp.base.ui.activities.BaseActivity
 import com.vetkoli.sanket.standapp.home.contract.IMemberDetailContract
 import com.vetkoli.sanket.standapp.home.presenter.MemberDetailPresenter
 import com.vetkoli.sanket.standapp.models.Member
-import com.vetkoli.sanket.standapp.utils.MiscUtils
 import com.vetkoli.sanket.standapp.utils.load
 import kotlinx.android.synthetic.main.activity_member_detail.*
 
@@ -74,7 +73,7 @@ class MemberDetailActivity : BaseActivity(), IMemberDetailContract.View {
         member.missMap = App.missMap
         ivProfilePic.load(member.profilePic)
         tvName.text = member.name
-        tvMissCountSummary.text = getString(R.string.d_missed_this_month, MiscUtils.getMissCountThisMonth(member))
+        tvMissCountSummary.text = getString(R.string.d_missed, member.missCount)
 
     }
 
