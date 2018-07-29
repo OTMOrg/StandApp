@@ -95,7 +95,7 @@ class HomeActivity : BaseActivity(), IHomeContract.View {
     private fun initData() {
         showProgress(getString(R.string.loading))
         val database = FirebaseDatabase.getInstance()
-        val databaseReference = database.getReference()
+        val databaseReference = database.reference
         getData(databaseReference)
 
 //        addDBEntry(databaseReference)
@@ -109,7 +109,7 @@ class HomeActivity : BaseActivity(), IHomeContract.View {
         val currentTime = System.currentTimeMillis()
         member.apply {
             id = uid.toString()
-            name = "Neha Bisht"
+            name = "Hrituja Hedau"
             missMap = mutableMapOf()
             lastUpdatedBy = ""
             lastUpdatedOn = currentTime
@@ -117,7 +117,7 @@ class HomeActivity : BaseActivity(), IHomeContract.View {
         }
 
         databaseReference.child(Constants.TEAMS)
-                .child("creditApp")
+                .child("farmerApp")
                 .child(Constants.MEMBERS)
                 .child(uid)
                 .setValue(member)
@@ -286,14 +286,14 @@ class HomeActivity : BaseActivity(), IHomeContract.View {
                                             month: String, missMap: MutableMap<String, MutableMap<String, MutableMap<String, UpdatedByMetadata>>>, year: String) {
         val missMonthMap = mutableMapOf<String, MutableMap<String, UpdatedByMetadata>>()
         initAndPutMissDayIntoMonth(dayOfMonth, updatedByMetadata, missMonthMap, month)
-        missMap.put(year, missMonthMap)
+        missMap[year] = missMonthMap
     }
 
     private fun initAndPutMissDayIntoMonth(dayOfMonth: String, updatedByMetadata: UpdatedByMetadata,
                                            missMonthMap: MutableMap<String, MutableMap<String, UpdatedByMetadata>>, month: String) {
         val missDayMap = mutableMapOf<String, UpdatedByMetadata>()
-        missDayMap.put(dayOfMonth, updatedByMetadata)
-        missMonthMap.put(month, missDayMap)
+        missDayMap[dayOfMonth] = updatedByMetadata
+        missMonthMap[month] = missDayMap
     }
 
     private fun isMemberUpdatedToday(member: Member): Boolean {

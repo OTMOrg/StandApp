@@ -7,7 +7,6 @@ import com.vetkoli.sanket.standapp.base.models.Item
 import com.vetkoli.sanket.standapp.base.ui.viewholders.BaseViewHolder
 import com.vetkoli.sanket.standapp.home.ui.activities.HomeActivity
 import com.vetkoli.sanket.standapp.models.Member
-import com.vetkoli.sanket.standapp.utils.MiscUtils
 import com.vetkoli.sanket.standapp.utils.load
 import com.vetkoli.sanket.standapp.utils.toDateString
 import kotlinx.android.synthetic.main.item_member.view.*
@@ -23,8 +22,9 @@ class MemberViewHolder(itemView: View) : BaseViewHolder(itemView) {
         itemView.ivProfilePic.load(member.profilePic)
         itemView.tvName.text = member.name
         itemView.tvDate.text = member.lastUpdatedOn.toDateString()
-        itemView.tvMissCount.text = App.appContext.getString(R.string.d_missed_this_month,
-                MiscUtils.getMissCountThisMonth(member))
+        /*itemView.tvMissCount.text = App.appContext.getString(R.string.d_missed_this_month,
+                MiscUtils.getMissCountThisMonth(member))*/
+        itemView.tvMissCount.text = App.appContext.getString(R.string.d_missed, member.missCount)
         itemView.btnPlusOne.setOnClickListener {
             (itemView.context as HomeActivity).showConfirmationDialogToPlusOne(adapterPosition)
         }

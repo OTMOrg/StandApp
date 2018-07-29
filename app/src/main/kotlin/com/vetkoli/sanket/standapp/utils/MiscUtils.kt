@@ -33,7 +33,12 @@ object MiscUtils {
             if (monthMap == null || !monthMap.containsKey(month)) {
                 return 0
             } else {
-                return monthMap.size
+                val dayMap = monthMap[month]
+                if (dayMap == null) {
+                    return 0;
+                } else {
+                    return dayMap.size
+                }
             }
         }
     }
