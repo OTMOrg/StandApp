@@ -32,7 +32,8 @@
             android:theme="@style/AppThemeNoActionBar" />
         <activity android:name=".login.ui.activities.ResetPasswordActivity" />
         <activity android:name=".home.ui.activities.HomeActivity" />
-        <activity android:name=".home.ui.activities.MemberDetailActivity"></activity>
+        <activity android:name=".home.ui.activities.MemberDetailActivity" />
+        <activity android:name=".timer.TimerActivity"/>
     </application>
 
 </manifest>

@@ -5,12 +5,20 @@
     <item
         android:id="@+id/action_logout"
         app:showAsAction="never"
-        android:title="@string/logout"/>
+        android:title="@string/logout"
+        />
 
     <item
         android:id="@+id/action_clear_all"
         app:showAsAction="never"
         android:title="@string/clear_all"
+        />
+
+    <item
+        android:id="@+id/action_timer"
+        app:showAsAction="ifRoom"
+        android:title="@string/timer"
+        android:icon="@drawable/ic_timer_white_24dp"
         />
 
 </menu>

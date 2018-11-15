@@ -36,5 +36,9 @@
     <string name="clear_miss_count_confirmation_message">Are you sure you want to clear everyones miss count?</string>
     <string name="failed_to_read_members">Failed to read members</string>
     <string name="error_while_fetching_data">Error while fetching data</string>
+    <string name="timer">Timer</string>
+    <string name="start">Start</string>
+    <string name="reset">Reset</string>
+    <string name="stop">Stop</string>
 
 </resources>

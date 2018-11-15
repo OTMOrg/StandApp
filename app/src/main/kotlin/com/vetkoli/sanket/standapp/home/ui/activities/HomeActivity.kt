@@ -23,6 +23,7 @@ import com.vetkoli.sanket.standapp.home.ui.adapters.MembersAdapter
 import com.vetkoli.sanket.standapp.models.Member
 import com.vetkoli.sanket.standapp.models.UpdatedByMetadata
 import com.vetkoli.sanket.standapp.splash.ui.activities.SplashActivity
+import com.vetkoli.sanket.standapp.timer.TimerActivity
 import com.vetkoli.sanket.standapp.utils.MiscUtils
 import kotlinx.android.synthetic.main.activity_home.*
 import java.util.*
@@ -87,17 +88,14 @@ class HomeActivity : BaseActivity(), IHomeContract.View {
                     showConfirmationDialogToClearAllEntries()
                     return true
                 }
+                R.id.action_timer -> {
+                    startTimerActivity()
+                    return true
+                }
             }
         }
         return super.onOptionsItemSelected(item)
     }
-
-    private fun logout() {
-        FirebaseAuth.getInstance().signOut()
-        startActivity(SplashActivity.newIntent(this))
-        finish()
-    }
-
 
     /***
      * Helper
@@ -219,6 +217,16 @@ class HomeActivity : BaseActivity(), IHomeContract.View {
         memberList = mutableListOf<Member>()
         memberAdapter = MembersAdapter(memberList)
         rvHome.adapter = memberAdapter
+    }
+
+    private fun startTimerActivity() {
+        startActivity(TimerActivity.newIntent(this))
+    }
+
+    private fun logout() {
+        FirebaseAuth.getInstance().signOut()
+        startActivity(SplashActivity.newIntent(this))
+        finish()
     }
 
     /***

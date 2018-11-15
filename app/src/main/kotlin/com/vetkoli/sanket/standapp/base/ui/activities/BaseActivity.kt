@@ -28,8 +28,10 @@ abstract class BaseActivity : AppCompatActivity() , IBaseContract.BaseView {
 
     protected fun showSnack(message: String, duration: Int, buttonString: String, listener: View.OnClickListener?, view: View) {
         val snackbar = Snackbar.make(view, message, duration)
-        snackbar.setAction(buttonString, listener)
-        snackbar.show()
+        snackbar.apply {
+            setAction(buttonString, listener)
+            show()
+        }
     }
 
     override fun showProgress(message: String) {
