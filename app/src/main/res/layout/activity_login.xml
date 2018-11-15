@@ -1,27 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/parentContainer"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
-    android:id="@+id/parentContainer"
     tools:context=".login.ui.activities.LoginActivity">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:gravity="center"
         android:background="@color/colorPrimary"
+        android:gravity="center"
         android:orientation="vertical"
         android:padding="@dimen/activity_horizontal_margin">
 
 
         <ImageView
-            android:contentDescription="LOGO"
             android:layout_width="@dimen/logo_w_h"
             android:layout_height="@dimen/logo_w_h"
             android:layout_gravity="center_horizontal"
             android:layout_marginBottom="30dp"
+            android:contentDescription="LOGO"
             android:src="@mipmap/ic_launcher" />
 
         <android.support.design.widget.TextInputLayout
@@ -34,7 +34,9 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="10dp"
                 android:hint="@string/hint_email"
+                android:imeOptions="actionNext"
                 android:inputType="textEmailAddress"
+                android:selectAllOnFocus="true"
                 android:textColor="@android:color/white"
                 android:textColorHint="@android:color/white" />
         </android.support.design.widget.TextInputLayout>
@@ -49,6 +51,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="10dp"
                 android:hint="@string/hint_password"
+                android:imeOptions="actionDone"
                 android:inputType="textPassword"
                 android:textColor="@android:color/white"
                 android:textColorHint="@android:color/white" />
@@ -87,7 +90,7 @@
             android:textColor="@android:color/white"
             android:textSize="15dp"
             android:visibility="gone"
-            tools:visibility="visible"/>
+            tools:visibility="visible" />
     </LinearLayout>
 
     <ProgressBar

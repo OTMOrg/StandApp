@@ -3,7 +3,10 @@ package com.vetkoli.sanket.standapp.login.ui.activities
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.view.KeyEvent
 import android.view.View
+import android.view.inputmethod.EditorInfo
+import android.widget.TextView
 import com.vetkoli.sanket.standapp.R
 import com.vetkoli.sanket.standapp.base.ui.activities.BaseActivity
 import com.vetkoli.sanket.standapp.home.ui.activities.HomeActivity
@@ -35,7 +38,29 @@ class LoginActivity : BaseActivity(), ILoginContract.LoginView {
     }
 
     private fun init() {
+        initActionListeners()
         initOnClickListeners()
+    }
+
+    private fun initActionListeners() {
+        etEmail.setOnEditorActionListener { _, actionId, _ ->
+            if (actionId == EditorInfo.IME_ACTION_NEXT) {
+                etPassword.requestFocus()
+                return@setOnEditorActionListener true;
+            }
+             false
+        }
+        etPassword.setOnEditorActionListener(object : TextView.OnEditorActionListener {
+            override fun onEditorAction(v: TextView?, actionId: Int, event: KeyEvent?): Boolean {
+                return when (actionId) {
+                    EditorInfo.IME_ACTION_DONE -> {
+                        delegateFlow()
+                        true
+                    }
+                    else -> false
+                }
+            }
+        })
     }
 
     private fun initOnClickListeners() {
