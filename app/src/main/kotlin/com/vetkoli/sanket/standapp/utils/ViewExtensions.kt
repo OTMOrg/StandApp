@@ -7,10 +7,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import android.widget.TextView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.vetkoli.sanket.standapp.R
 import com.vetkoli.sanket.standapp.application.App
+import java.text.DecimalFormat
 
 /**
  * Created by Sanket on 9/12/17.
@@ -55,6 +57,29 @@ fun ImageView.load(url: String?) {
 
 fun ViewGroup.inflate(layoutRes: Int): View {
     return LayoutInflater.from(context).inflate(layoutRes, this, false)
+}
+
+fun TextView.setTimer(millis: Long) {
+    val df = DecimalFormat("00")
+
+    val hours = (millis / (3600 * 1000)).toInt()
+    var remaining = (millis % (3600 * 1000)).toInt()
+
+    val minutes = remaining / (60 * 1000)
+    remaining %= (60 * 1000)
+
+    val seconds = remaining / 1000
+    remaining %= 1000
+
+    var text = ""
+
+    if (hours > 0) {
+        text += df.format(hours.toLong()) + ":"
+    }
+
+    text += df.format(minutes.toLong()) + ":"
+    text += df.format(seconds.toLong())
+    setText(text)
 }
 
 fun <T> unsafeLazy(initializer: () -> T) = lazy(LazyThreadSafetyMode.NONE, initializer)
