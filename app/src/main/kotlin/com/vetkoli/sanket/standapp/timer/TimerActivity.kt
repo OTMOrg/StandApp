@@ -11,6 +11,7 @@ import android.os.CountDownTimer
 import android.os.SystemClock
 import android.view.MenuItem
 import android.view.View
+import android.widget.Button
 import android.widget.NumberPicker
 import android.widget.TextView
 import com.vetkoli.sanket.standapp.R
@@ -102,12 +103,19 @@ class TimerActivity : BaseActivity() {
     private fun showTimeChoosingDialog() {
         val dialog = Dialog(this)
         dialog.setContentView(R.layout.dialog_timer)
-        dialog.setTitle(getString(R.string.select_total_standup_duration))
+        dialog.setTitle(getString(R.string.select_per_person_duration))
         val numberPicker =  dialog.findViewById<NumberPicker>(R.id.numberPicker)
         val tvTitle = dialog.findViewById<TextView>(R.id.tvTitle)
-        tvTitle.setText(R.string.select_total_standup_duration)
+        val btnOkay = dialog.findViewById<Button>(R.id.btnOkay)
+        btnOkay.setOnClickListener {
+            toast("Per person time updated!")
+            perPersonMillis = numberPicker.value * 60 * 1000L
+            initCountDownTimer()
+            dialog.dismiss()
+        }
+        tvTitle.setText(R.string.select_per_person_duration)
         numberPicker.maxValue = 60
-        numberPicker.minValue = 0
+        numberPicker.minValue = 1
         dialog.setCanceledOnTouchOutside(true)
         dialog.show()
     }
@@ -134,18 +142,20 @@ class TimerActivity : BaseActivity() {
         tvCountdownTimer.setOnClickListener {
             if (timerViewModel.isStarted) {
                 startCountdownTimer()
+            } else {
+                showTimeChoosingDialog()
             }
         }
     }
 
     private fun playLongBeep() {
-        snack("Play long beep")
+//        snack("Play long beep")
         val toneG = ToneGenerator(AudioManager.STREAM_ALARM, 100)
         toneG.startTone(ToneGenerator.TONE_DTMF_0, 1000)
     }
 
     private fun playSmallBeep() {
-        snack("Play small beep")
+//        snack("Play small beep")
         val toneG = ToneGenerator(AudioManager.STREAM_ALARM, 100)
         toneG.startTone(ToneGenerator.TONE_CDMA_ALERT_CALL_GUARD)
     }

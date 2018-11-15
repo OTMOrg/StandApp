@@ -40,7 +40,8 @@
     <string name="start">Start</string>
     <string name="reset">Reset</string>
     <string name="stop">Stop</string>
-    <string name="done">Done</string>
+    <string name="okay">Okay</string>
     <string name="select_total_standup_duration">Select total standup duration</string>
+    <string name="select_per_person_duration">Select per person duration</string>
 
 </resources>
