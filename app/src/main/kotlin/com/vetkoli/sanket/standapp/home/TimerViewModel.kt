@@ -18,7 +18,7 @@ class TimerViewModel : ViewModel() {
     fun reset() {
         startTime = 0
         isNearEndBeepPlayed = false
-        isSmallBeepPlayed = isNearEndBeepPlayed
-        isStarted = isSmallBeepPlayed
+        isSmallBeepPlayed = false
+        isStarted = false
     }
 }

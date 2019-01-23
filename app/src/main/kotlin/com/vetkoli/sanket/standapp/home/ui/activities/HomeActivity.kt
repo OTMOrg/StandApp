@@ -123,10 +123,10 @@ class HomeActivity : BaseActivity(), IHomeContract.View {
         val currentTime = System.currentTimeMillis()
         member.apply {
             id = uid.toString()
-            name = "Hrituja Hedau"
+            name = "Michelle"
             missMap = mutableMapOf()
             lastUpdatedBy = ""
-//            lastUpdatedOn = currentTime
+            lastUpdatedOn = currentTime
             profilePic = ""
             role = ""
         }
