@@ -16,7 +16,6 @@ import android.widget.NumberPicker
 import android.widget.TextView
 import com.vetkoli.sanket.standapp.R
 import com.vetkoli.sanket.standapp.base.ui.activities.BaseActivity
-import com.vetkoli.sanket.standapp.home.TimerViewModel
 import com.vetkoli.sanket.standapp.utils.setTimer
 import kotlinx.android.synthetic.main.activity_timer.*
 

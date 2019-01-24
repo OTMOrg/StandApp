@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.vetkoli.sanket.standapp">
-
     <!-- To auto-complete the email text field in the login form with the user's emails -->
     <uses-permission android:name="android.permission.GET_ACCOUNTS" />
     <uses-permission android:name="android.permission.READ_PROFILE" />
@@ -15,6 +14,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+        <activity android:name=".EstimationCardsActivity"></activity>
         <activity
             android:name=".splash.ui.activities.SplashActivity"
             android:theme="@style/AppThemeNoActionBar">
@@ -33,7 +33,7 @@
         <activity android:name=".login.ui.activities.ResetPasswordActivity" />
         <activity android:name=".home.ui.activities.HomeActivity" />
         <activity android:name=".home.ui.activities.MemberDetailActivity" />
-        <activity android:name=".timer.TimerActivity"/>
+        <activity android:name=".timer.TimerActivity" />
     </application>
 
 </manifest>

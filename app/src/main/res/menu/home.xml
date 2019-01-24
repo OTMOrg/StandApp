@@ -21,4 +21,10 @@
         android:icon="@drawable/ic_timer_white_24dp"
         />
 
+    <item
+        android:id="@+id/action_estimation_cards"
+        app:showAsAction="ifRoom"
+        android:title="@string/estimation_cards"
+        android:icon="@drawable/ic_crop_portrait_white_24dp"/>
+
 </menu>

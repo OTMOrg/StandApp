@@ -1,4 +1,4 @@
-package com.vetkoli.sanket.standapp.home
+package com.vetkoli.sanket.standapp.timer
 
 import android.arch.lifecycle.ViewModel
 

@@ -43,5 +43,8 @@
     <string name="okay">Okay</string>
     <string name="select_total_standup_duration">Select total standup duration</string>
     <string name="select_per_person_duration">Select per person duration</string>
+    <string name="estimation_cards">Estimation cards</string>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
 
 </resources>

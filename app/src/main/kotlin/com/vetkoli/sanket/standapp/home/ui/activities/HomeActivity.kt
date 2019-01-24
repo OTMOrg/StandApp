@@ -13,6 +13,7 @@ import android.view.MenuItem
 import android.view.View
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
+import com.vetkoli.sanket.standapp.EstimationCardsActivity
 import com.vetkoli.sanket.standapp.R
 import com.vetkoli.sanket.standapp.application.App
 import com.vetkoli.sanket.standapp.application.Constants
@@ -92,9 +93,18 @@ class HomeActivity : BaseActivity(), IHomeContract.View {
                     startTimerActivity()
                     return true
                 }
+                R.id.action_estimation_cards -> {
+                    startEstimationCardsActivity()
+                    return true
+                }
+
             }
         }
         return super.onOptionsItemSelected(item)
+    }
+
+    private fun startEstimationCardsActivity() {
+        startActivity(EstimationCardsActivity.newIntent(this))
     }
 
     /***
@@ -265,11 +275,11 @@ class HomeActivity : BaseActivity(), IHomeContract.View {
         val dialogBuilder = AlertDialog.Builder(this).apply {
             setTitle(getString(R.string.confirmation))
             setMessage(getString(R.string.clear_miss_count_confirmation_message))
-            setPositiveButton("Yes", DialogInterface.OnClickListener { dialog, which ->
+            setPositiveButton(getString(R.string.yes)) { dialog, _ ->
                 clearAllMembersMissCount()
                 dialog.dismiss()
-            })
-            setNegativeButton("No", DialogInterface.OnClickListener { dialog, which -> dialog.dismiss() })
+            }
+            setNegativeButton(getString(R.string.no)) { dialog, _ -> dialog.dismiss() }
         }
         val dialog = dialogBuilder.create()
         dialog.show()
@@ -373,7 +383,7 @@ class HomeActivity : BaseActivity(), IHomeContract.View {
     }
 
     fun goToMemberDetail(position: Int) {
-        val member = memberList.get(position)
+        val member = memberList[position]
         App.missMap = member.missMap
         startActivity(MemberDetailActivity.newIntent(context, member))
     }
