@@ -32,8 +32,7 @@ class TimerActivity : BaseActivity() {
 
     companion object {
         fun newIntent(context: Context): Intent {
-            val intent = Intent(context, TimerActivity::class.java)
-            return intent
+            return Intent(context, TimerActivity::class.java)
         }
     }
 
