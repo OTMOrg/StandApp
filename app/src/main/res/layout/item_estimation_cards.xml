@@ -12,4 +12,6 @@
     android:textSize="@dimen/text_size_xxl"
     app:autoSizeTextType="uniform"
     android:padding="@dimen/small_padding"
-    tools:text="0.5" />
+    android:transitionName="@string/tn_story_points"
+    tools:text="0.5"
+    tools:targetApi="lollipop" />

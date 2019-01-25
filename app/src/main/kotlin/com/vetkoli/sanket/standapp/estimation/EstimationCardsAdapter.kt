@@ -10,7 +10,7 @@ import kotlinx.android.synthetic.main.item_estimation_cards.view.*
 /**
  * Created by Sanket on 25/01/19.
  */
-class EstimationCardsAdapter(private val items: List<String>): RecyclerView.Adapter<EstimationCardsAdapter.EstimationCardsViewHolder>() {
+class EstimationCardsAdapter(private val items: List<String>, val callback: Callback): RecyclerView.Adapter<EstimationCardsAdapter.EstimationCardsViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): EstimationCardsViewHolder {
         return EstimationCardsViewHolder(parent!!.inflate(R.layout.item_estimation_cards))
@@ -25,11 +25,20 @@ class EstimationCardsAdapter(private val items: List<String>): RecyclerView.Adap
     }
 
 
-    class EstimationCardsViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+    inner class EstimationCardsViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+
+        init {
+            itemView.setOnClickListener { callback.onItemClick(itemView.tvStoryPoints.text.toString(), itemView.tvStoryPoints) }
+        }
+
         fun bind(points: String) {
             itemView.tvStoryPoints.text = points
         }
 
+    }
+
+    interface Callback {
+        fun onItemClick(points: String, view: View)
     }
 
 }

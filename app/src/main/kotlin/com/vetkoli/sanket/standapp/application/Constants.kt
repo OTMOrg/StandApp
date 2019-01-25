@@ -4,18 +4,24 @@ package com.vetkoli.sanket.standapp.application
  * Created by Sanket on 2/2/18.
  */
 object Constants {
+    @Suppress("ClassName")
+    object BUNDLE_KEYS {
+        const val STORY_POINTS = "storyPoints"
+    }
 
-    val TEAMS = "teams"
+    //TODO move these to bundle keys whichever are applicable
 
-    val FARMER_APP = "farmerApp"
+    const val TEAMS = "teams"
 
-    val TEAM_NAME = "teamName"
+    const val FARMER_APP = "farmerApp"
 
-    val MEMBERS: String = "members"
+    const val TEAM_NAME = "teamName"
 
-    val MEMBER: String = "member"
+    const val MEMBERS: String = "members"
 
-    val SCRUM_MASTER: String = "Scrum Master"
+    const val MEMBER: String = "member"
+
+    const val SCRUM_MASTER: String = "Scrum Master"
 
 
 }
