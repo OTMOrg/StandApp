@@ -191,16 +191,19 @@ class HomeActivity : BaseActivity(), IHomeContract.View {
                     .child(teamKey)
                     .child(Constants.MEMBERS).addValueEventListener(object : ValueEventListener {
                 override fun onDataChange(dataSnapshot: DataSnapshot?) {
+                    var count = 0
                     memberList.clear()
                     dataSnapshot?.children?.forEach { childSnapshot ->
                         val member: Member? = childSnapshot.getValue(Member::class.java)
                         member?.let {
+                            count += it.missCount
                             memberList.add(it)
-                            if (it.id.equals(FirebaseAuth.getInstance().currentUser!!.uid)) {
+                            if (it.id == FirebaseAuth.getInstance().currentUser!!.uid) {
                                 currentMember = it
                             }
                         }
                     }
+                    tvMissCountSummary.text = getString(R.string.total_miss_count, count.toString())
                     memberAdapter.notifyDataSetChanged()
                     hideProgress()
                 }
