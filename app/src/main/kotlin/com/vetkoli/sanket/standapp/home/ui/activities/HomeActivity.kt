@@ -144,14 +144,14 @@ class HomeActivity : BaseActivity(), IHomeContract.View {
         databaseReference.child(Constants.TEAMS)
                 .child("farmerApp")
                 .child(Constants.MEMBERS)
-                .child(uid)
+                .child(uid!!)
                 .setValue(member)
     }
 
     private fun getData(databaseReference: DatabaseReference) {
         databaseReference.child(Constants.TEAMS)
                 .addListenerForSingleValueEvent(object : ValueEventListener {
-                    override fun onDataChange(dataSnapshot: DataSnapshot?) {
+                    override fun onDataChange(dataSnapshot: DataSnapshot) {
                         if (dataSnapshot != null) {
                             val userId = FirebaseAuth.getInstance().currentUser?.uid
                             for (childSnapshot in dataSnapshot.children) {
@@ -160,7 +160,7 @@ class HomeActivity : BaseActivity(), IHomeContract.View {
                                     val member = memberSnapshot.getValue(Member::class.java)
                                     if (member != null) {
                                         if (userId.equals(member.id)) {
-                                            teamKey = childSnapshot.key
+                                            teamKey = childSnapshot.key!!
                                             teamName = childSnapshot.child(Constants.TEAM_NAME).value as String
                                             initView(member, databaseReference)
                                             break
@@ -171,7 +171,7 @@ class HomeActivity : BaseActivity(), IHomeContract.View {
                         }
                     }
 
-                    override fun onCancelled(p0: DatabaseError?) {
+                    override fun onCancelled(p0: DatabaseError) {
                         hideProgress()
                         Log.e(localClassName, "Error while getting team name")
                         snack(getString(R.string.error_while_fetching_data))
@@ -190,10 +190,10 @@ class HomeActivity : BaseActivity(), IHomeContract.View {
             databaseReference.child(Constants.TEAMS)
                     .child(teamKey)
                     .child(Constants.MEMBERS).addValueEventListener(object : ValueEventListener {
-                override fun onDataChange(dataSnapshot: DataSnapshot?) {
+                override fun onDataChange(dataSnapshot: DataSnapshot) {
                     var count = 0
                     memberList.clear()
-                    dataSnapshot?.children?.forEach { childSnapshot ->
+                    dataSnapshot.children.forEach { childSnapshot ->
                         val member: Member? = childSnapshot.getValue(Member::class.java)
                         member?.let {
                             count += it.missCount
@@ -208,7 +208,7 @@ class HomeActivity : BaseActivity(), IHomeContract.View {
                     hideProgress()
                 }
 
-                override fun onCancelled(p0: DatabaseError?) {
+                override fun onCancelled(p0: DatabaseError) {
                     hideProgress()
                     Log.e(localClassName, "Failed to read memebrs")
                     snack(getString(R.string.failed_to_read_members))
@@ -297,15 +297,15 @@ class HomeActivity : BaseActivity(), IHomeContract.View {
         val firebaseDatabase = FirebaseDatabase.getInstance()
         val databaseReference = firebaseDatabase.getReference("/teams/" + teamKey + "/members")
         databaseReference.addListenerForSingleValueEvent(object : ValueEventListener {
-            override fun onDataChange(dataSnapshot: DataSnapshot?) {
+            override fun onDataChange(dataSnapshot: DataSnapshot) {
                 memberList.clear()
-                dataSnapshot?.children?.forEach { childSnapshot ->
-                    databaseReference.child(childSnapshot.key).child("missCount").setValue(0)
+                dataSnapshot.children.forEach { childSnapshot ->
+                    childSnapshot.key?.let { databaseReference.child(it).child("missCount").setValue(0) }
                 }
                 hideProgress()
             }
 
-            override fun onCancelled(p0: DatabaseError?) {
+            override fun onCancelled(p0: DatabaseError) {
                 hideProgress()
                 Log.e(localClassName, "Failed to read memebrs")
                 snack(getString(R.string.failed_to_read_members))

@@ -2,19 +2,37 @@ package com.vetkoli.sanket.standapp.login.ui.activities
 
 import android.content.Context
 import android.content.Intent
+import android.content.IntentSender
 import android.os.Bundle
-import android.view.KeyEvent
+import android.support.v7.app.AppCompatActivity
 import android.view.View
 import android.view.inputmethod.EditorInfo
-import android.widget.TextView
-import com.vetkoli.sanket.standapp.R
+import com.google.android.gms.auth.api.Auth
+import com.google.android.gms.auth.api.credentials.Credential
+import com.google.android.gms.auth.api.credentials.CredentialPickerConfig
+import com.google.android.gms.auth.api.credentials.HintRequest
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions
+import com.google.android.gms.common.ConnectionResult
+import com.google.android.gms.common.api.GoogleApiClient
 import com.vetkoli.sanket.standapp.base.ui.activities.BaseActivity
 import com.vetkoli.sanket.standapp.home.ui.activities.HomeActivity
 import com.vetkoli.sanket.standapp.login.contract.ILoginContract
 import com.vetkoli.sanket.standapp.login.presenter.LoginPresenter
 import kotlinx.android.synthetic.main.activity_login.*
 
-class LoginActivity : BaseActivity(), ILoginContract.LoginView {
+
+
+
+class LoginActivity : BaseActivity(), ILoginContract.LoginView, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
+
+    override fun onConnectionFailed(p0: ConnectionResult) {
+    }
+
+    override fun onConnected(p0: Bundle?) {
+    }
+
+    override fun onConnectionSuspended(p0: Int) {
+    }
 
     private val presenter: ILoginContract.LoginPresenter
             by unsafeLazy { LoginPresenter(this) }
@@ -24,6 +42,8 @@ class LoginActivity : BaseActivity(), ILoginContract.LoginView {
             val intent = Intent(context, LoginActivity::class.java)
             return intent
         }
+
+        private const val RC_HINT_REQUEST: Int = 1001
     }
 
     /***
@@ -32,7 +52,7 @@ class LoginActivity : BaseActivity(), ILoginContract.LoginView {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_login)
+        setContentView(com.vetkoli.sanket.standapp.R.layout.activity_login)
 
         init()
     }
@@ -40,6 +60,83 @@ class LoginActivity : BaseActivity(), ILoginContract.LoginView {
     private fun init() {
         initActionListeners()
         initOnClickListeners()
+        initEmailHintRequest()
+    }
+
+
+    private fun initEmailHintRequest() {
+
+        val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestEmail()
+                .build()
+
+        var googleApiClient = GoogleApiClient.Builder(this)
+                .addConnectionCallbacks(this)
+                .enableAutoManage(this, this)
+                .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
+                .addApi(Auth.CREDENTIALS_API)
+                .build()
+
+        /*val hintRequest = HintRequest.Builder()
+                .setPhoneNumberIdentifierSupported(true)
+                .build()
+
+        val intent = Auth.CredentialsApi.getHintPickerIntent(
+                googleApiClient, hintRequest)
+        startIntentSenderForResult(intent.intentSender,
+                resolveHint, null, 0, 0, 0)*/
+
+        var hintRequest = HintRequest.Builder()
+                .setHintPickerConfig(
+                        CredentialPickerConfig.Builder()
+                                .setShowCancelButton(true)
+                                .setPrompt(CredentialPickerConfig.Prompt.SIGN_IN)
+                                .build()
+                )
+                .setEmailAddressIdentifierSupported(true)
+//                .setPhoneNumberIdentifierSupported(true)
+                .build()
+
+        val intent = Auth.CredentialsApi.getHintPickerIntent(googleApiClient, hintRequest)
+        try {
+            startIntentSenderForResult(intent.intentSender, Companion.RC_HINT_REQUEST, null, 0, 0, 0)
+        } catch (e: IntentSender.SendIntentException) {
+            emailHintRequestFailure()
+        }
+    }
+
+    private fun emailHintRequestFailure() {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+
+        when (requestCode) {
+            RC_HINT_REQUEST -> handleEmailHintRequestResolution(resultCode, data)
+        }
+    }
+
+    private fun handleEmailHintRequestResolution(resultCode: Int, data: Intent?) {
+        if (resultCode == AppCompatActivity.RESULT_CANCELED) {
+            emailHintRequestCancelled()
+        } else {
+            emailHintRequestSuccess(data)
+        }
+    }
+
+    private fun emailHintRequestCancelled() {
+    }
+
+    private fun emailHintRequestSuccess(data: Intent?) {
+        val credential: Credential? = data?.getParcelableExtra(Credential.EXTRA_KEY)
+        credential?.let {
+            proceedOnMainScreen(it.id)
+        }
+    }
+
+    private fun proceedOnMainScreen(id: String) {
+        etEmail.setText(id)
     }
 
     private fun initActionListeners() {
@@ -50,17 +147,15 @@ class LoginActivity : BaseActivity(), ILoginContract.LoginView {
             }
              false
         }
-        etPassword.setOnEditorActionListener(object : TextView.OnEditorActionListener {
-            override fun onEditorAction(v: TextView?, actionId: Int, event: KeyEvent?): Boolean {
-                return when (actionId) {
-                    EditorInfo.IME_ACTION_DONE -> {
-                        delegateFlow()
-                        true
-                    }
-                    else -> false
+        etPassword.setOnEditorActionListener { _, actionId, _ ->
+            when (actionId) {
+                EditorInfo.IME_ACTION_DONE -> {
+                    delegateFlow()
+                    true
                 }
+                else -> false
             }
-        })
+        }
     }
 
     private fun initOnClickListeners() {
@@ -87,13 +182,13 @@ class LoginActivity : BaseActivity(), ILoginContract.LoginView {
     }
 
     override fun showEmailEmptyError() {
-        val errorString: String = getString(R.string.error_empty_email)
+        val errorString: String = getString(com.vetkoli.sanket.standapp.R.string.error_empty_email)
         etEmail.error = errorString
         toast(errorString)
     }
 
     override fun showPasswordEmptyError() {
-        val errorString = getString(R.string.error_password_empty)
+        val errorString = getString(com.vetkoli.sanket.standapp.R.string.error_password_empty)
         etPassword.error = errorString
         toast(errorString)
     }
