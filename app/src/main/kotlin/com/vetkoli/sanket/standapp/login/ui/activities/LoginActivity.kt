@@ -14,6 +14,7 @@ import com.google.android.gms.auth.api.credentials.HintRequest
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.ConnectionResult
 import com.google.android.gms.common.api.GoogleApiClient
+import com.vetkoli.sanket.standapp.R
 import com.vetkoli.sanket.standapp.base.ui.activities.BaseActivity
 import com.vetkoli.sanket.standapp.home.ui.activities.HomeActivity
 import com.vetkoli.sanket.standapp.login.contract.ILoginContract
@@ -24,15 +25,6 @@ import kotlinx.android.synthetic.main.activity_login.*
 
 
 class LoginActivity : BaseActivity(), ILoginContract.LoginView, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
-
-    override fun onConnectionFailed(p0: ConnectionResult) {
-    }
-
-    override fun onConnected(p0: Bundle?) {
-    }
-
-    override fun onConnectionSuspended(p0: Int) {
-    }
 
     private val presenter: ILoginContract.LoginPresenter
             by unsafeLazy { LoginPresenter(this) }
@@ -61,82 +53,6 @@ class LoginActivity : BaseActivity(), ILoginContract.LoginView, GoogleApiClient.
         initActionListeners()
         initOnClickListeners()
         initEmailHintRequest()
-    }
-
-
-    private fun initEmailHintRequest() {
-
-        val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                .requestEmail()
-                .build()
-
-        var googleApiClient = GoogleApiClient.Builder(this)
-                .addConnectionCallbacks(this)
-                .enableAutoManage(this, this)
-                .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
-                .addApi(Auth.CREDENTIALS_API)
-                .build()
-
-        /*val hintRequest = HintRequest.Builder()
-                .setPhoneNumberIdentifierSupported(true)
-                .build()
-
-        val intent = Auth.CredentialsApi.getHintPickerIntent(
-                googleApiClient, hintRequest)
-        startIntentSenderForResult(intent.intentSender,
-                resolveHint, null, 0, 0, 0)*/
-
-        var hintRequest = HintRequest.Builder()
-                .setHintPickerConfig(
-                        CredentialPickerConfig.Builder()
-                                .setShowCancelButton(true)
-                                .setPrompt(CredentialPickerConfig.Prompt.SIGN_IN)
-                                .build()
-                )
-                .setEmailAddressIdentifierSupported(true)
-//                .setPhoneNumberIdentifierSupported(true)
-                .build()
-
-        val intent = Auth.CredentialsApi.getHintPickerIntent(googleApiClient, hintRequest)
-        try {
-            startIntentSenderForResult(intent.intentSender, Companion.RC_HINT_REQUEST, null, 0, 0, 0)
-        } catch (e: IntentSender.SendIntentException) {
-            emailHintRequestFailure()
-        }
-    }
-
-    private fun emailHintRequestFailure() {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
-
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-
-        when (requestCode) {
-            RC_HINT_REQUEST -> handleEmailHintRequestResolution(resultCode, data)
-        }
-    }
-
-    private fun handleEmailHintRequestResolution(resultCode: Int, data: Intent?) {
-        if (resultCode == AppCompatActivity.RESULT_CANCELED) {
-            emailHintRequestCancelled()
-        } else {
-            emailHintRequestSuccess(data)
-        }
-    }
-
-    private fun emailHintRequestCancelled() {
-    }
-
-    private fun emailHintRequestSuccess(data: Intent?) {
-        val credential: Credential? = data?.getParcelableExtra(Credential.EXTRA_KEY)
-        credential?.let {
-            proceedOnMainScreen(it.id)
-        }
-    }
-
-    private fun proceedOnMainScreen(id: String) {
-        etEmail.setText(id)
     }
 
     private fun initActionListeners() {
@@ -171,6 +87,84 @@ class LoginActivity : BaseActivity(), ILoginContract.LoginView, GoogleApiClient.
         val emailId: String = etEmail.text.toString()
         val password: String = etPassword.text.toString()
         presenter.validateInputAndSignIn(emailId, password)
+    }
+
+    private fun initEmailHintRequest() {
+        val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestEmail()
+                .build()
+
+        val googleApiClient = GoogleApiClient.Builder(this)
+                .addConnectionCallbacks(this)
+                .enableAutoManage(this, this)
+                .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
+                .addApi(Auth.CREDENTIALS_API)
+                .build()
+
+        val hintRequest = HintRequest.Builder()
+                .setHintPickerConfig(
+                        CredentialPickerConfig.Builder()
+                                .setShowCancelButton(true)
+                                .setPrompt(CredentialPickerConfig.Prompt.SIGN_IN)
+                                .build()
+                )
+                .setEmailAddressIdentifierSupported(true)
+//                .setPhoneNumberIdentifierSupported(true)
+                .build()
+
+        val intent = Auth.CredentialsApi.getHintPickerIntent(googleApiClient, hintRequest)
+        try {
+            startIntentSenderForResult(intent.intentSender, Companion.RC_HINT_REQUEST, null, 0, 0, 0)
+        } catch (e: IntentSender.SendIntentException) {
+            emailHintRequestFailure(e)
+        }
+    }
+
+    private fun emailHintRequestFailure(e: IntentSender.SendIntentException) {
+        snack(getString(R.string.error_suggesting_email_hint) + e.localizedMessage)
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+
+        when (requestCode) {
+            RC_HINT_REQUEST -> handleEmailHintRequestResolution(resultCode, data)
+        }
+    }
+
+    private fun handleEmailHintRequestResolution(resultCode: Int, data: Intent?) {
+        if (resultCode == AppCompatActivity.RESULT_CANCELED) {
+            emailHintRequestCancelled()
+        } else {
+            emailHintRequestSuccess(data)
+        }
+    }
+
+    private fun emailHintRequestCancelled() {
+        // do nothing
+    }
+
+    private fun emailHintRequestSuccess(data: Intent?) {
+        val credential: Credential? = data?.getParcelableExtra(Credential.EXTRA_KEY)
+        credential?.let {
+            setEmail(it.id)
+        }
+    }
+
+    private fun setEmail(id: String) {
+        etEmail.setText(id)
+    }
+
+    override fun onConnectionFailed(result: ConnectionResult) {
+        toast("Google Api Client connection failed" + result.errorMessage)
+    }
+
+    override fun onConnected(p0: Bundle?) {
+        toast("Google Api Client connected")
+    }
+
+    override fun onConnectionSuspended(p0: Int) {
+        toast("Google Api Client connection suspended")
     }
 
     /**

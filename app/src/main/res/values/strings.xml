@@ -50,5 +50,6 @@
     <string name="title_activity_story_points">StoryPointsActivity</string>
     <string name="tn_story_points">Story Points</string>
     <string name="total_miss_count">Total miss count: %s</string>
+    <string name="error_suggesting_email_hint">There was some issue while suggesting email hint!</string>
 
 </resources>
