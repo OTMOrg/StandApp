@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.DialogInterface
 import android.content.Intent
 import android.os.Bundle
+import android.support.v4.content.ContextCompat
 import android.support.v7.app.AlertDialog
 import android.support.v7.widget.LinearLayoutManager
 import android.text.TextUtils
@@ -32,8 +33,6 @@ import java.util.*
 class HomeActivity : BaseActivity(), IHomeContract.View {
 
     private val presenter: IHomeContract.Presenter by unsafeLazy { HomePresenter(this) }
-
-    private lateinit var memberList: MutableList<Member>
 
     private lateinit var memberAdapter: MembersAdapter
 
@@ -192,12 +191,12 @@ class HomeActivity : BaseActivity(), IHomeContract.View {
                     .child(Constants.MEMBERS).addValueEventListener(object : ValueEventListener {
                 override fun onDataChange(dataSnapshot: DataSnapshot) {
                     var count = 0
-                    memberList.clear()
+                    memberAdapter.clear()
                     dataSnapshot.children.forEach { childSnapshot ->
                         val member: Member? = childSnapshot.getValue(Member::class.java)
                         member?.let {
                             count += it.missCount
-                            memberList.add(it)
+                            memberAdapter.add(it)
                             if (it.id == FirebaseAuth.getInstance().currentUser!!.uid) {
                                 currentMember = it
                             }
@@ -227,8 +226,7 @@ class HomeActivity : BaseActivity(), IHomeContract.View {
 
     private fun initRecyclerView() {
         rvHome.layoutManager = LinearLayoutManager(this)
-        memberList = mutableListOf<Member>()
-        memberAdapter = MembersAdapter(memberList)
+        memberAdapter = MembersAdapter()
         rvHome.adapter = memberAdapter
     }
 
@@ -256,14 +254,14 @@ class HomeActivity : BaseActivity(), IHomeContract.View {
      */
 
     fun showConfirmationDialogToPlusOne(position: Int) {
-        val member = memberList.get(position)
+        val member = memberAdapter.get(position)
         val dialogBuilder = AlertDialog.Builder(this).apply {
             setTitle(getString(R.string.confirmation))
             setMessage(getString(R.string.plus_one_confirmation_message, member.name))
-            setPositiveButton("Yes", DialogInterface.OnClickListener { dialog, which ->
+            setPositiveButton("Yes") { dialog, which ->
                 plusOneMemberIfNotAlreadyDoneForToday(position)
                 dialog.dismiss()
-             })
+            }
             setNegativeButton("No", DialogInterface.OnClickListener { dialog, which -> dialog.dismiss() })
         }
         val dialog = dialogBuilder.create()
@@ -288,8 +286,8 @@ class HomeActivity : BaseActivity(), IHomeContract.View {
         dialog.show()
         val buttonNegative = dialog.getButton(DialogInterface.BUTTON_NEGATIVE)
         val buttonPositive = dialog.getButton(DialogInterface.BUTTON_POSITIVE)
-        buttonNegative.setTextColor(resources.getColor(R.color.colorPrimary))
-        buttonPositive.setTextColor(resources.getColor(R.color.colorPrimary))
+        buttonNegative.setTextColor(ContextCompat.getColor(this, R.color.colorPrimary))
+        buttonPositive.setTextColor(ContextCompat.getColor(this, R.color.colorPrimary))
     }
 
     private fun clearAllMembersMissCount() {
@@ -298,7 +296,7 @@ class HomeActivity : BaseActivity(), IHomeContract.View {
         val databaseReference = firebaseDatabase.getReference("/teams/" + teamKey + "/members")
         databaseReference.addListenerForSingleValueEvent(object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
-                memberList.clear()
+                memberAdapter.clear()
                 dataSnapshot.children.forEach { childSnapshot ->
                     childSnapshot.key?.let { databaseReference.child(it).child("missCount").setValue(0) }
                 }
@@ -314,7 +312,7 @@ class HomeActivity : BaseActivity(), IHomeContract.View {
     }
 
     private fun plusOneMemberIfNotAlreadyDoneForToday(position: Int) {
-        val member = memberList[position]
+        val member = memberAdapter.get(position)
         if (!isMemberUpdatedToday(member)) {
             val timeMillis = System.currentTimeMillis()
             member.missCount++
@@ -386,7 +384,7 @@ class HomeActivity : BaseActivity(), IHomeContract.View {
     }
 
     fun goToMemberDetail(position: Int) {
-        val member = memberList[position]
+        val member = memberAdapter.get(position)
         App.missMap = member.missMap
         startActivity(MemberDetailActivity.newIntent(context, member))
     }
