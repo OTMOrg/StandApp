@@ -132,12 +132,12 @@ class HomeActivity : BaseActivity(), IHomeContract.View {
         val currentTime = System.currentTimeMillis()
         member.apply {
             id = uid.toString()
-            name = "Siddharth Marathe"
+            name = "Sanket Vetkoli"
             missMap = mutableMapOf()
             lastUpdatedBy = ""
             lastUpdatedOn = currentTime
             profilePic = ""
-            role = "Backend"
+            role = "Android|Scrum Master"
         }
 
         databaseReference.child(Constants.TEAMS)
