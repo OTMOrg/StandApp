@@ -132,16 +132,16 @@ class HomeActivity : BaseActivity(), IHomeContract.View {
         val currentTime = System.currentTimeMillis()
         member.apply {
             id = uid.toString()
-            name = "Sanket Vetkoli"
+            name = "ABC"
             missMap = mutableMapOf()
             lastUpdatedBy = ""
             lastUpdatedOn = currentTime
             profilePic = ""
-            role = "Android|Scrum Master"
+            role = ""
         }
 
         databaseReference.child(Constants.TEAMS)
-                .child("farmerApp")
+                .child(Constants.ZOOM_TAIL_TECH)
                 .child(Constants.MEMBERS)
                 .child(uid!!)
                 .setValue(member)

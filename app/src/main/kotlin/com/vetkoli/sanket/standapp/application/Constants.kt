@@ -15,6 +15,8 @@ object Constants {
 
     const val FARMER_APP = "farmerApp"
 
+    const val ZOOM_TAIL_TECH = "ZoomTail Tech"
+
     const val TEAM_NAME = "teamName"
 
     const val MEMBERS: String = "members"

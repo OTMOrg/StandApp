@@ -8,7 +8,7 @@ import java.util.*
  */
 
 
-val DEFAULT_DATE_FORMAT = "dd MMM yy"
+const val DEFAULT_DATE_FORMAT = "dd MMM yy"
 
 fun Long.toDateString(dateFormat: String = DEFAULT_DATE_FORMAT): String {
     val date = Date(this)
