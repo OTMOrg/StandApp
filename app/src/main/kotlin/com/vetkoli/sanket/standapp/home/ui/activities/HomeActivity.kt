@@ -313,7 +313,7 @@ class HomeActivity : BaseActivity(), IHomeContract.View {
 
     private fun plusOneMemberIfNotAlreadyDoneForToday(position: Int) {
         val member = memberAdapter.get(position)
-        if (!isMemberUpdatedToday(member)) {
+//        if (!isMemberUpdatedToday(member)) {
             val timeMillis = System.currentTimeMillis()
             member.missCount++
             member.lastUpdatedOn = timeMillis
@@ -336,7 +336,7 @@ class HomeActivity : BaseActivity(), IHomeContract.View {
                     if (missMonthMap.containsKey(month)) {
                         val missDayMap = missMonthMap[month]
                         if (missDayMap != null) {
-                            missDayMap.put(dayOfMonth, updatedByMetadata)
+                            missDayMap[dayOfMonth] = updatedByMetadata
                         } else {
                             initAndPutMissDayIntoMonth(dayOfMonth, updatedByMetadata, missMonthMap, month)
                         }
@@ -354,9 +354,9 @@ class HomeActivity : BaseActivity(), IHomeContract.View {
             val databaseReference = firebaseDatabase.getReference("/teams/" + teamKey + "/members").child(member.id)
             databaseReference.setValue(member)
             databaseReference.child("lastUpdatedOn").setValue(timeMillis)
-        } else {
-            snack("Already updated today")
-        }
+//        } else {
+//            snack("Already updated today")
+//        }
     }
 
     private fun initAndPutMissMonthIntoYear(dayOfMonth: String, updatedByMetadata: UpdatedByMetadata,
