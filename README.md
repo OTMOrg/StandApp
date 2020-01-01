@@ -8,3 +8,4 @@ An android app to keep track of daily standups in office
 * Replace firebase real time database with cloud firestore
 * Add a provision to add member if the user is a scrum master
 * Add a provision to +1 the entire team
+* Add pomodoro timer for meetings
