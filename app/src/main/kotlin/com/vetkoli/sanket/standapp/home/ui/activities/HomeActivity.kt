@@ -141,7 +141,7 @@ class HomeActivity : BaseActivity(), IHomeContract.View {
         }
 
         databaseReference.child(Constants.TEAMS)
-                .child(Constants.ZOOM_TAIL_TECH)
+                .child(Constants.FARMER_APP)
                 .child(Constants.MEMBERS)
                 .child(uid!!)
                 .setValue(member)

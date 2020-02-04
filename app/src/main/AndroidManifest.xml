@@ -37,7 +37,9 @@
             android:name=".login.ui.activities.SignupActivity"
             android:theme="@style/AppThemeNoActionBar" />
         <activity android:name=".login.ui.activities.ResetPasswordActivity" />
-        <activity android:name=".home.ui.activities.HomeActivity" />
+        <activity android:name=".home.ui.activities.HomeActivity"
+            android:screenOrientation="portrait"
+            />
         <activity android:name=".home.ui.activities.MemberDetailActivity" />
         <activity android:name=".timer.TimerActivity"
             android:screenOrientation="portrait"/>
